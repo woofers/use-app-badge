@@ -1,0 +1,31 @@
+{
+  "name": "use-app-badge-demo",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "class-variance-authority": "^0.7.0",
+    "next": "14.2.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "standardized-app-badge": "workspace:*",
+    "use-app-badge": "workspace:*"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "4.0.0-alpha.14",
+    "@tailwindcss/postcss": "4.0.0-alpha.14",
+    "@types/node": "^20.12.7",
+    "@types/react": "^18.2.78",
+    "@types/react-dom": "^18.2.25",
+    "eslint": "^9.0.0",
+    "eslint-config-next": "14.2.1",
+    "postcss": "^8.4.38",
+    "tailwindcss": "4.0.0-alpha.14",
+    "typescript": "^5.4.5"
+  }
+}
