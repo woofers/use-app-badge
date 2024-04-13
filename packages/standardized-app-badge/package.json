@@ -1,0 +1,66 @@
+{
+  "name": "standardized-app-badge",
+  "version": "0.1.5",
+  "description": "Cross-browser wrapper for Navigator Badge API",
+  "sideEffects": false,
+  "main": "./lib/cjs/index.production.js",
+  "module": "./lib/es/index.production.mjs",
+  "types": "./lib/index.d.ts",
+  "exports": {
+    ".": {
+      "development": {
+        "types": "./lib/index.d.ts",
+        "import": "./lib/es/index.development.mjs",
+        "default": "./lib/cjs/index.development.js"
+      },
+      "production": {
+        "types": "./lib/index.d.ts",
+        "import": "./lib/es/index.production.mjs",
+        "default": "./lib/cjs/index.production.js"
+      }
+    }
+  },
+  "files": [
+    "lib",
+    "LICENSE",
+    "package.json",
+    "README.md"
+  ],
+  "repository": "https://github.com/woofers/use-app-badge",
+  "keywords": [
+    "badge",
+    "navigator",
+    "notification",
+    "cross-browser",
+    "push",
+    "dot",
+    "standardized"
+  ],
+  "author": "Jaxson Van Doorn <jaxson.vandoorn@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/woofers/use-app-badge/issues"
+  },
+  "homepage": "https://jaxs.onl/use-app-badge/",
+  "scripts": {
+    "build": "bunchee -m && ./build.sh && ./restore.sh",
+    "build-publish": "bunchee -m && ./build.sh && npm publish && ./restore.sh",
+    "dev": "bunchee --watch -m",
+    "test": "bun typecheck",
+    "lint": "eslint \"src/**/*.{jsx,js,tsx,ts}\"",
+    "typecheck": "tsc --p .",
+    "clean": "rimraf lib"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.0.12",
+    "@types/node": "^20.12.7",
+    "bunchee": "^5.1.2",
+    "prettier": "^3.0.3",
+    "rimraf": "^5.0.1",
+    "typescript": "^5.2.2"
+  },
+  "browserslist": [
+    "defaults",
+    "not IE 11"
+  ]
+}
