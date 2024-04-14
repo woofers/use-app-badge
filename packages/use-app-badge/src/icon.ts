@@ -35,18 +35,30 @@ const createCanvas = () => {
   return canvas
 }
 
+const delay = (ms: number) => new Promise<void>(resolve => setTimeout(() => resolve(), ms))
+
 const getCanvas = (() => {
   let canvas: HTMLCanvasElement
   let context: CanvasRenderingContext2D
-  return () => {
+  let inUse = false
+  return async () => {
+    let retry = 0
     if (!canvas) {
       canvas = createCanvas()
     }
     if (!context) {
       context = canvas.getContext('2d')
     }
-    context.clearRect(0, 0, drawBadgeSize, drawBadgeSize)
-    return [canvas, context] as const
+    while (inUse && 10 >= retry) {
+      await delay(3 > retry ? 200 : 750)
+      retry += 1
+
+    }
+    if (inUse) {
+      throw new Error('Could not get canvas context')
+    }
+    inUse = true
+    return [canvas, context, () => { inUse = false }] as const
   }
 })()
 
@@ -96,8 +108,10 @@ export const generateIconFor = async (props: BadgeProps) => {
     badgeColor,
     badgeSize
   } = getProps(props)
-  const [canvas, context] = getCanvas()
+  const [canvas, context, release] = await getCanvas()
+  console.log('got canvas')
   const image = await getImage(src)
+  context.clearRect(0, 0, drawBadgeSize, drawBadgeSize)
   context.drawImage(image, 0, 0, drawBadgeSize, drawBadgeSize)
   if (shouldDrawBadgeForContent(badge)) {
     drawBadgeCircle(canvas, context, badgeColor, badgeSize)
@@ -115,5 +129,7 @@ export const generateIconFor = async (props: BadgeProps) => {
       )
     }
   }
+  console.log('done')
+  release()
   return canvas.toDataURL('image/png')
 }

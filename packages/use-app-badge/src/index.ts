@@ -136,7 +136,7 @@ const useAppBadge = ({ favIcon }: { favIcon: FavIcon | false } = { favIcon: fals
   useEffect(() => {
     console.log(hasIcon, count, src, badgeColor, badgeSize, textColor, hasPermission)
     const generateIcon = !isSupported() && !hasPermission && hasIcon
-    if (generateIcon && count > 0) {
+    if (generateIcon) {
       const update = async () => {
         const icon = await generateIconFor({ src, content: count, badgeColor, badgeSize, textColor })
         setBadge(icon)
@@ -167,6 +167,7 @@ const AppBadge: React.FC<{
   useEffect(() => {
     if (count > 0) {
       set(count)
+      console.log('hi', count)
     } else {
       clear()
     }
