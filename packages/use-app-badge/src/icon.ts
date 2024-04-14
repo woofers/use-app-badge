@@ -12,7 +12,7 @@ const getProps = ({
   content = false,
   badgeColor = '#eb372c',
   textColor = '#ffffff',
-  badgeSize = 10
+  badgeSize = 12
 }: BadgeProps) =>
   ({
     src,
@@ -22,17 +22,11 @@ const getProps = ({
     badgeSize
   }) as const
 
-const shouldDrawBadgeForContent = (content: any) => {
-  if (content == '') return true
-  if ((content as any) == false || content == 'false') return false
-  return true
-}
+const shouldDrawBadgeForContent = (content: number | string | boolean) => typeof content === 'number' ? content > 0 : !!content
 
-const shouldDrawTextForContent = (content: any) => {
-  return (content as any) != false && content !== 'true'
-}
+const shouldDrawTextForContent = (content: number | string | boolean) => typeof content === 'number' ? content > 0 : !!content
 
-const drawBadgeSize = 16
+const drawBadgeSize = 32
 
 const createCanvas = () => {
   const canvas = document.createElement('canvas')
@@ -47,6 +41,7 @@ const getCanvas = (() => {
   return () => {
     if (!canvas) {
       canvas = createCanvas()
+      document.body.append(canvas)
     }
     if (!context) {
       context = canvas.getContext('2d')
@@ -58,16 +53,23 @@ const getCanvas = (() => {
 
 const getImage = (() => {
   let cache = {} as Record<string, HTMLImageElement>
-  return (src: string) => {
+  return (src: string) => new Promise<HTMLImageElement>((resolve, reject) => {
     if (!(src in cache)) {
       const image = document.createElement('img')
+      image.width = drawBadgeSize
+      image.height = drawBadgeSize
       image.src = src
       cache[src] = image
+      image.onload = () => resolve(cache[src])
+      image.onerror = () => reject()
+      image.onabort = () => reject()
+    } else {
+      resolve(cache[src])
     }
-    return cache[src]
-  }
+  })
 })()
 
+const padding = 1
 const drawBadgeCircle = (
   canvas: HTMLCanvasElement,
   context: CanvasRenderingContext2D,
@@ -77,8 +79,8 @@ const drawBadgeCircle = (
   const radius = size * 0.5
   context.beginPath()
   context.arc(
-    canvas.width - radius,
-    canvas.height - radius,
+    canvas.width - radius - padding,
+    radius + padding,
     radius,
     0,
     2 * Math.PI
@@ -87,7 +89,7 @@ const drawBadgeCircle = (
   context.fill()
 }
 
-export const generateIconFor = (props: BadgeProps) => {
+export const generateIconFor = async (props: BadgeProps) => {
   const {
     src,
     content: badge,
@@ -96,18 +98,22 @@ export const generateIconFor = (props: BadgeProps) => {
     badgeSize
   } = getProps(props)
   const [canvas, context] = getCanvas()
-  const image = getImage(src)
+  const image = await getImage(src)
   context.drawImage(image, 0, 0, drawBadgeSize, drawBadgeSize)
   if (shouldDrawBadgeForContent(badge)) {
     drawBadgeCircle(canvas, context, badgeColor, badgeSize)
     if (shouldDrawTextForContent(badge)) {
+      console.log('drawing')
       context.textAlign = 'center'
       context.textBaseline = 'middle'
       context.fillStyle = textColor
+      const content = `${badge}`.slice(0, 2)
+      const doubleDigit = content.length > 1
+      context.font = `${doubleDigit ? 8 : 10}px sans-serif`
       context.fillText(
-        `${badge}`.slice(0, 2),
-        canvas.width - badgeSize / 2,
-        canvas.height - badgeSize / 2
+        content.slice(0, 2),
+        canvas.width - badgeSize / 2 - padding - (doubleDigit ? 0.5 : 0),
+        badgeSize / 2 + padding + (doubleDigit ? 0.5 : 0)
       )
     }
   }
