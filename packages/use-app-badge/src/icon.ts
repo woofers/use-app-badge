@@ -22,9 +22,11 @@ const getProps = ({
     badgeSize
   }) as const
 
-const shouldDrawBadgeForContent = (content: number | string | boolean) => typeof content === 'number' ? content > 0 : !!content
+const shouldDrawBadgeForContent = (content: number | string | boolean) =>
+  typeof content === 'number' ? content > 0 : !!content
 
-const shouldDrawTextForContent = (content: number | string | boolean) => typeof content === 'number' ? content > 0 : !!content
+const shouldDrawTextForContent = (content: number | string | boolean) =>
+  typeof content === 'number' ? content > 0 : !!content
 
 const drawBadgeSize = 32
 
@@ -35,7 +37,8 @@ const createCanvas = () => {
   return canvas
 }
 
-const delay = (ms: number) => new Promise<void>(resolve => setTimeout(() => resolve(), ms))
+const delay = (ms: number) =>
+  new Promise<void>(resolve => setTimeout(() => resolve(), ms))
 
 const getCanvas = (() => {
   let canvas: HTMLCanvasElement
@@ -52,32 +55,38 @@ const getCanvas = (() => {
     while (inUse && 10 >= retry) {
       await delay(3 > retry ? 200 : 750)
       retry += 1
-
     }
     if (inUse) {
       throw new Error('Could not get canvas context')
     }
     inUse = true
-    return [canvas, context, () => { inUse = false }] as const
+    return [
+      canvas,
+      context,
+      () => {
+        inUse = false
+      }
+    ] as const
   }
 })()
 
 const getImage = (() => {
   let cache = {} as Record<string, HTMLImageElement>
-  return (src: string) => new Promise<HTMLImageElement>((resolve, reject) => {
-    if (!(src in cache)) {
-      const image = document.createElement('img')
-      image.width = drawBadgeSize
-      image.height = drawBadgeSize
-      image.src = src
-      cache[src] = image
-      image.onload = () => resolve(cache[src])
-      image.onerror = () => reject()
-      image.onabort = () => reject()
-    } else {
-      resolve(cache[src])
-    }
-  })
+  return (src: string) =>
+    new Promise<HTMLImageElement>((resolve, reject) => {
+      if (!(src in cache)) {
+        const image = document.createElement('img')
+        image.width = drawBadgeSize
+        image.height = drawBadgeSize
+        image.src = src
+        cache[src] = image
+        image.onload = () => resolve(cache[src])
+        image.onerror = () => reject()
+        image.onabort = () => reject()
+      } else {
+        resolve(cache[src])
+      }
+    })
 })()
 
 const padding = 2
@@ -109,7 +118,6 @@ export const generateIconFor = async (props: BadgeProps) => {
     badgeSize
   } = getProps(props)
   const [canvas, context, release] = await getCanvas()
-  console.log('got canvas')
   const image = await getImage(src)
   context.clearRect(0, 0, drawBadgeSize, drawBadgeSize)
   context.drawImage(image, 0, 0, drawBadgeSize, drawBadgeSize)
@@ -129,7 +137,7 @@ export const generateIconFor = async (props: BadgeProps) => {
       )
     }
   }
-  console.log('done')
+  const datastring = canvas.toDataURL('image/png')
   release()
-  return canvas.toDataURL('image/png')
+  return datastring
 }

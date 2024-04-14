@@ -51,11 +51,13 @@ const useIsSupported = () => {
 type FavIcon = Omit<Parameters<typeof generateIconFor>[0], 'content'>
 
 const noop = () => {}
-const useAppBadge = ({ favIcon }: { favIcon: FavIcon | false } = { favIcon: false }) => {
+const useAppBadge = (
+  { favIcon }: { favIcon: FavIcon | false } = { favIcon: false }
+) => {
   const [count, setCount] = useState(0)
-  const [badge, setBadge]= useState('')
+  const [badge, setBadge] = useState('')
   const hasIcon = !!favIcon
-  const {src, badgeColor, badgeSize, textColor} = favIcon || {}
+  const { src, badgeColor, badgeSize, textColor } = favIcon || {}
   const [hasPermission, setPermission] = useState<boolean | undefined>()
   const isSupported = useIsSupported()
   const hasSupport = isSupported()
@@ -132,16 +134,22 @@ const useAppBadge = ({ favIcon }: { favIcon: FavIcon | false } = { favIcon: fals
       data.clear().catch(noop)
     }
   }, [data.clear, hasSupport])
-  
+
   useEffect(() => {
-    console.log(hasIcon, count, src, badgeColor, badgeSize, textColor, hasPermission)
     const generateIcon = !isSupported() && !hasPermission && hasIcon
     if (generateIcon) {
       const update = async () => {
-        const icon = await generateIconFor({ src, content: count, badgeColor, badgeSize, textColor })
+        const icon = await generateIconFor({
+          src,
+          content: count,
+          badgeColor,
+          badgeSize,
+          textColor
+        })
         setBadge(icon)
-        console.log(src, icon)
-        const meta = (document.querySelector('link[rel="icon"]') || {}) as { href: string }
+        const meta = (document.querySelector('link[rel="icon"]') || {}) as {
+          href: string
+        }
         if (meta) meta.href = icon
       }
       update()
@@ -155,19 +163,18 @@ const AppBadge: React.FC<{
   favIcon?: FavIcon
   count: number
 }> = ({ favIcon = false as unknown as FavIcon, count }) => {
-  const { promptForPermission, set, isAllowed, clear } = useAppBadge({ favIcon })
+  const { promptForPermission, set, isAllowed, clear } = useAppBadge({
+    favIcon
+  })
   const allowed = (() => {
     try {
       return isAllowed()
-    } catch (_) {
-
-    }
+    } catch (_) {}
     return false
   })()
   useEffect(() => {
     if (count > 0) {
       set(count)
-      console.log('hi', count)
     } else {
       clear()
     }
