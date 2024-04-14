@@ -2,11 +2,10 @@
   "name": "use-app-badge",
   "version": "0.0.1",
   "description": "",
-  "main": "lib/index.js",
-  "module": "lib/index.mjs",
+  "main": "src/index.ts",
+  "module": "src/index.ts",
   "sideEffects": false,
   "src": "src/index.tsx",
-  "types": "lib/index.d.ts",
   "files": [
     "lib",
     "LICENSE",

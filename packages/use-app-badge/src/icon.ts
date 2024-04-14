@@ -68,46 +68,6 @@ const getImage = (() => {
   }
 })()
 
-const generateIconFor = (props: BadgeProps) => {
-  const {
-    src,
-    content: badge,
-    textColor,
-    badgeColor,
-    badgeSize
-  } = getProps(props)
-  const [canvas, context] = getCanvas()
-  const image = getImage(src)
-  let badgeBackgroundSrc = ''
-  const badgeBackgroundImage = getImage(badgeBackgroundSrc)
-
-  context.drawImage(image, 0, 0, drawBadgeSize, drawBadgeSize)
-  if (shouldDrawBadgeForContent(badge)) {
-    if (badgeBackgroundSrc) {
-      context.drawImage(
-        badgeBackgroundImage,
-        canvas.width - badgeSize,
-        canvas.height - badgeSize,
-        badgeSize,
-        badgeSize
-      )
-    } else {
-      drawBadgeCircle(canvas, context, badgeColor, badgeSize)
-    }
-    if (shouldDrawTextForContent(badge)) {
-      context.textAlign = 'center'
-      context.textBaseline = 'middle'
-      context.fillStyle = textColor
-      context.fillText(
-        `${badge}`.slice(0, 2),
-        canvas.width - badgeSize / 2,
-        canvas.height - badgeSize / 2
-      )
-    }
-  }
-  return canvas.toDataURL('image/png')
-}
-
 const drawBadgeCircle = (
   canvas: HTMLCanvasElement,
   context: CanvasRenderingContext2D,
@@ -125,4 +85,31 @@ const drawBadgeCircle = (
   )
   context.fillStyle = color
   context.fill()
+}
+
+export const generateIconFor = (props: BadgeProps) => {
+  const {
+    src,
+    content: badge,
+    textColor,
+    badgeColor,
+    badgeSize
+  } = getProps(props)
+  const [canvas, context] = getCanvas()
+  const image = getImage(src)
+  context.drawImage(image, 0, 0, drawBadgeSize, drawBadgeSize)
+  if (shouldDrawBadgeForContent(badge)) {
+    drawBadgeCircle(canvas, context, badgeColor, badgeSize)
+    if (shouldDrawTextForContent(badge)) {
+      context.textAlign = 'center'
+      context.textBaseline = 'middle'
+      context.fillStyle = textColor
+      context.fillText(
+        `${badge}`.slice(0, 2),
+        canvas.width - badgeSize / 2,
+        canvas.height - badgeSize / 2
+      )
+    }
+  }
+  return canvas.toDataURL('image/png')
 }
