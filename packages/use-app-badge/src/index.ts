@@ -1,16 +1,5 @@
 import { generateIconFor } from './icon'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-
-type BadgeConfig = {
-  src: string
-  badge: string
-  badgeColor: string
-  textColor: string
-  badgeBackgroundSrc: string
-  badgeSize: string
-}
-
-const AppBadge: React.FC<{}> = () => null
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
 const hasNotificationPermission = async () => {
   let { state } = await navigator.permissions.query({
@@ -25,26 +14,30 @@ const requestNotificationPermission = async () => {
 }
 
 const checkNotificationPermission = async () => {
-    console.log('hi')
   let state = await hasNotificationPermission()
-  console.log('hi', state)
   if (state === 'prompt') {
     state = await requestNotificationPermission()
   }
   return state !== 'denied'
 }
 
-const isBadgeAllowed = () =>
-  hasNotificationPermission()
-    .then(state => state === 'granted')
-    .catch(() => false)
+const isInstalled = () =>
+  'matchMedia' in window &&
+  window.matchMedia(
+    '(display-mode: standalone), (display-mode: minimal-ui), (display-mode: window-controls-overlay)'
+  ).matches
 
-const hasNavigator = () => typeof window !== 'undefined' && navigator
-const hasNotification = () =>
-  typeof window !== 'undefined' && 'Notification' in window
+const hasNotifcations = () => 'Notification' in window
 const isSupported = () =>
-  hasNavigator() && hasNotification() && 'setAppBadge' in navigator
+  typeof window !== 'undefined' &&
+  hasNotifcations() &&
+  isInstalled() &&
+  navigator &&
+  'setAppBadge' in navigator
+
 const createError = () => new DOMException('Badging API not available')
+const createAllowedError = () =>
+  new Error('`isAllowed()` was called before `promptForPermission()`')
 
 const useIsSupported = () => {
   const [data, setData] = useState(false)
@@ -55,19 +48,25 @@ const useIsSupported = () => {
   return supported
 }
 
-const useCreateAppBadge = () => {
+type FavIcon = Omit<Parameters<typeof generateIconFor>[0], 'content'>
+
+const noop = () => {}
+const useAppBadge = ({ favIcon }: { favIcon: FavIcon | false } = { favIcon: false }) => {
   const [count, setCount] = useState(0)
+  const [badge, setBadge]= useState('')
+  const hasIcon = !!favIcon
+  const {src, badgeColor, badgeSize, textColor} = favIcon || {}
   const [hasPermission, setPermission] = useState<boolean | undefined>()
   const isSupported = useIsSupported()
   const hasSupport = isSupported()
   const fallbackIfUnsupported = useCallback(
-    <T, A>(func: (...args: A[]) => Promise<T>, ...args: A[]) => {
+    <T>(func: () => Promise<T>) => {
       return async () => {
         if (!hasSupport) {
           throw createError()
         }
-        console.log(args, 'hi')
-        return await func(...args)
+        const data = await func()
+        return data
       }
     },
     [hasSupport]
@@ -84,46 +83,98 @@ const useCreateAppBadge = () => {
   }, [fallbackIfUnsupported])
   const isAllowed = useCallback(() => {
     if (typeof hasPermission === 'undefined') {
-      throw new Error('`isAllowed()` was called before `promptForPermission()`')
+      throw createAllowedError()
     }
     return hasPermission
   }, [hasPermission])
-  const setBadge = useCallback(
+  const setAppBadge = useCallback(
     async (contents?: number) => {
-      await fallbackIfUnsupported(() => navigator.setAppBadge(contents))()
+      try {
+        await fallbackIfUnsupported(() => navigator.setAppBadge(contents))()
+      } catch (e) {
+        if (!hasIcon) {
+          throw e
+        }
+      }
       setCount(contents)
     },
-    [fallbackIfUnsupported]
+    [fallbackIfUnsupported, hasIcon]
   )
-  const clearBadge = useCallback(async () => {
-    await fallbackIfUnsupported(() => navigator.clearAppBadge())()
+  const clearAppBadge = useCallback(async () => {
+    try {
+      await fallbackIfUnsupported(() => navigator.clearAppBadge())()
+    } catch (e) {
+      if (!hasIcon) {
+        throw e
+      }
+    }
     setCount(0)
-  }, [fallbackIfUnsupported])
+  }, [fallbackIfUnsupported, hasIcon])
   const data = useMemo(
     () =>
       ({
-        set: setBadge,
-        clear: clearBadge,
+        set: setAppBadge,
+        clear: clearAppBadge,
         promptForPermission,
         isAllowed,
         isSupported,
-        count
+        count,
+        icon: badge
       }) as const,
-    [count, setBadge, clearBadge, isAllowed, promptForPermission]
+    [count, setAppBadge, clearAppBadge, isAllowed, promptForPermission, badge]
   )
+
+  useEffect(() => {
+    if (!hasSupport) {
+      return
+    }
+    return () => {
+      data.clear().catch(noop)
+    }
+  }, [data.clear, hasSupport])
+  
+  useEffect(() => {
+    console.log(hasIcon, count, src, badgeColor, badgeSize, textColor, hasPermission)
+    const generateIcon = !isSupported() && !hasPermission && hasIcon
+    if (generateIcon && count > 0) {
+      const update = async () => {
+        const icon = await generateIconFor({ src, content: count, badgeColor, badgeSize, textColor })
+        setBadge(icon)
+        console.log(src, icon)
+        const meta = (document.querySelector('link[rel="icon"]') || {}) as { href: string }
+        if (meta) meta.href = icon
+      }
+      update()
+    }
+  }, [hasIcon, count, src, badgeColor, badgeSize, textColor, hasPermission])
+
   return data
 }
 
-const useAppBadge = () => {
-  const { set, clear, count, promptForPermission, isAllowed, isSupported } =
-    useCreateAppBadge()
-  const badge = !isSupported() && typeof window !== 'undefined' ? generateIconFor({ src: '/favicon.ico' }) : ''
+const AppBadge: React.FC<{
+  favIcon?: FavIcon
+  count: number
+}> = ({ favIcon = false as unknown as FavIcon, count }) => {
+  const { promptForPermission, set, isAllowed, clear } = useAppBadge({ favIcon })
+  const allowed = (() => {
+    try {
+      return isAllowed()
+    } catch (_) {
+
+    }
+    return false
+  })()
   useEffect(() => {
-    return () => {
+    if (count > 0) {
+      set(count)
+    } else {
       clear()
     }
-  }, [clear])
-  return { set, clear, count, promptForPermission, badge, isAllowed, isSupported }
+  }, [count, allowed, set, clear])
+  useEffect(() => {
+    promptForPermission().catch(noop)
+  }, [promptForPermission])
+  return null
 }
 
-export { useAppBadge }
+export { useAppBadge, AppBadge }

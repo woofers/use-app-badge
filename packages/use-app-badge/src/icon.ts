@@ -12,7 +12,7 @@ const getProps = ({
   content = false,
   badgeColor = '#eb372c',
   textColor = '#ffffff',
-  badgeSize = 12
+  badgeSize = 18
 }: BadgeProps) =>
   ({
     src,
@@ -41,7 +41,6 @@ const getCanvas = (() => {
   return () => {
     if (!canvas) {
       canvas = createCanvas()
-      document.body.append(canvas)
     }
     if (!context) {
       context = canvas.getContext('2d')
@@ -69,7 +68,7 @@ const getImage = (() => {
   })
 })()
 
-const padding = 1
+const padding = 2
 const drawBadgeCircle = (
   canvas: HTMLCanvasElement,
   context: CanvasRenderingContext2D,
@@ -103,17 +102,16 @@ export const generateIconFor = async (props: BadgeProps) => {
   if (shouldDrawBadgeForContent(badge)) {
     drawBadgeCircle(canvas, context, badgeColor, badgeSize)
     if (shouldDrawTextForContent(badge)) {
-      console.log('drawing')
       context.textAlign = 'center'
       context.textBaseline = 'middle'
       context.fillStyle = textColor
       const content = `${badge}`.slice(0, 2)
       const doubleDigit = content.length > 1
-      context.font = `${doubleDigit ? 8 : 10}px sans-serif`
+      context.font = `${doubleDigit ? 14 : 18}px sans-serif`
       context.fillText(
-        content.slice(0, 2),
-        canvas.width - badgeSize / 2 - padding - (doubleDigit ? 0.5 : 0),
-        badgeSize / 2 + padding + (doubleDigit ? 0.5 : 0)
+        content,
+        canvas.width - badgeSize / 2 - padding,
+        badgeSize / 2 + padding + 1
       )
     }
   }
