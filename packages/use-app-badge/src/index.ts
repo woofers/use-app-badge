@@ -1,5 +1,14 @@
 import { useEffect, useMemo } from 'react'
 
+type BadgeConfig = {
+  src: string
+  badge: string
+  badgeColor: string
+  textColor: string
+  badgeBackgroundSrc: string
+  badgeSize: string
+}
+
 const AppBadge: React.FC<{}> = () => null
 
 const requestNotificationPermission = async () => {
