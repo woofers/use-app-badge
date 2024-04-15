@@ -1,52 +1,45 @@
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+  useSyncExternalStore
+} from 'react'
+import {
+  isAppBadgeSupported,
+  clearAppBadge,
+  setAppBadge,
+  requestAppBadgePermission,
+  isRecentSafari
+} from './standardized-app-badge'
 import { generateIconFor } from './icon'
-import { useCallback, useEffect, useMemo, useState } from 'react'
 
-const hasNotificationPermission = async () => {
-  let { state } = await navigator.permissions.query({
-    name: 'notifications'
-  })
-  return state
+const serverSnapshot = {
+  isAppBadgeSupported: () => false,
+  clearAppBadge: () =>
+    Promise.reject<void>(
+      new Error("'clearAppBadge' can not be called on server")
+    ),
+  setAppBadge: (_?: number) =>
+    Promise.reject<void>(
+      new Error("'setAppBadge' can not be called on server")
+    ),
+  requestAppBadgePermission: () => Promise.resolve(false)
 }
 
-const requestNotificationPermission = async () => {
-  const permission = await Notification.requestPermission()
-  return permission !== 'default' ? permission : 'denied'
+const snapshot = {
+  isAppBadgeSupported,
+  clearAppBadge,
+  setAppBadge,
+  requestAppBadgePermission
 }
 
-const checkNotificationPermission = async () => {
-  let state = await hasNotificationPermission()
-  if (state === 'prompt') {
-    state = await requestNotificationPermission()
-  }
-  return state !== 'denied'
-}
+const getServerSnapshot = () => serverSnapshot
+const getSnapshot = () => snapshot
+const emptySubscribe = () => () => {}
 
-const isInstalled = () =>
-  'matchMedia' in window &&
-  window.matchMedia(
-    '(display-mode: standalone), (display-mode: minimal-ui), (display-mode: window-controls-overlay)'
-  ).matches
-
-const hasNotifcations = () => 'Notification' in window
-const isSupported = () =>
-  typeof window !== 'undefined' &&
-  hasNotifcations() &&
-  isInstalled() &&
-  navigator &&
-  'setAppBadge' in navigator
-
-const createError = () => new DOMException('Badging API not available')
 const createAllowedError = () =>
-  new Error('`isAllowed()` was called before `promptForPermission()`')
-
-const useIsSupported = () => {
-  const [data, setData] = useState(false)
-  useEffect(() => {
-    setData(isSupported())
-  }, [])
-  const supported = useCallback(() => data, [data])
-  return supported
-}
+  new Error("'isAllowed()' was called before 'requestPermission()'")
 
 type FavIcon = Omit<Parameters<typeof generateIconFor>[0], 'content'>
 
@@ -54,45 +47,45 @@ const noop = () => {}
 const useAppBadge = (
   { favIcon }: { favIcon: FavIcon | false } = { favIcon: false }
 ) => {
+  const {
+    setAppBadge: set,
+    clearAppBadge: clear,
+    isAppBadgeSupported,
+    requestAppBadgePermission
+  } = useSyncExternalStore(emptySubscribe, getSnapshot, getServerSnapshot)
+  const [hasPermission, setPermission] = useState<boolean | undefined>()
   const [count, setCount] = useState(0)
+  const hasSupport = isAppBadgeSupported()
+
   const [badge, setBadge] = useState('')
   const hasIcon = !!favIcon
   const { src, badgeColor, badgeSize, textColor } = favIcon || {}
-  const [hasPermission, setPermission] = useState<boolean | undefined>()
-  const isSupported = useIsSupported()
-  const hasSupport = isSupported()
-  const fallbackIfUnsupported = useCallback(
-    <T>(func: () => Promise<T>) => {
-      return async () => {
-        if (!hasSupport) {
-          throw createError()
-        }
-        const data = await func()
-        return data
-      }
-    },
-    [hasSupport]
-  )
-  const promptForPermission = useCallback(async () => {
+
+  const requestPermission = useCallback(async () => {
     try {
-      const result = await fallbackIfUnsupported(checkNotificationPermission)()
+      const result = await requestAppBadgePermission()
       setPermission(result)
       return result
     } catch (e) {
       setPermission(false)
       throw e
     }
-  }, [fallbackIfUnsupported])
+  }, [requestAppBadgePermission])
   const isAllowed = useCallback(() => {
+    if (!hasSupport) {
+      return false
+    } else if (!isRecentSafari()) {
+      return true
+    }
     if (typeof hasPermission === 'undefined') {
       throw createAllowedError()
     }
     return hasPermission
-  }, [hasPermission])
+  }, [hasPermission, hasSupport])
   const setAppBadge = useCallback(
     async (contents?: number) => {
       try {
-        await fallbackIfUnsupported(() => navigator.setAppBadge(contents))()
+        await set(contents)
       } catch (e) {
         if (!hasIcon) {
           throw e
@@ -100,30 +93,38 @@ const useAppBadge = (
       }
       setCount(contents)
     },
-    [fallbackIfUnsupported, hasIcon]
+    [hasIcon, set]
   )
   const clearAppBadge = useCallback(async () => {
     try {
-      await fallbackIfUnsupported(() => navigator.clearAppBadge())()
+      await clear()
     } catch (e) {
       if (!hasIcon) {
         throw e
       }
     }
     setCount(0)
-  }, [fallbackIfUnsupported, hasIcon])
+  }, [clear])
   const data = useMemo(
     () =>
       ({
         set: setAppBadge,
         clear: clearAppBadge,
-        promptForPermission,
+        requestPermission,
         isAllowed,
-        isSupported,
+        isSupported: isAppBadgeSupported,
         count,
         icon: badge
       }) as const,
-    [count, setAppBadge, clearAppBadge, isAllowed, promptForPermission, badge]
+    [
+      setAppBadge,
+      clearAppBadge,
+      requestPermission,
+      isAllowed,
+      isAppBadgeSupported,
+      count,
+      badge
+    ]
   )
 
   useEffect(() => {
@@ -134,9 +135,8 @@ const useAppBadge = (
       data.clear().catch(noop)
     }
   }, [data.clear, hasSupport])
-
   useEffect(() => {
-    const generateIcon = !isSupported() && !hasPermission && hasIcon
+    const generateIcon = !isAllowed() && hasIcon
     if (generateIcon) {
       const update = async () => {
         const icon = await generateIconFor({
@@ -154,7 +154,7 @@ const useAppBadge = (
       }
       update()
     }
-  }, [hasIcon, count, src, badgeColor, badgeSize, textColor, hasPermission])
+  }, [hasIcon, count, src, badgeColor, badgeSize, textColor, isAllowed])
 
   return data
 }
@@ -163,7 +163,7 @@ const AppBadge: React.FC<{
   favIcon?: FavIcon
   count: number
 }> = ({ favIcon = false as unknown as FavIcon, count }) => {
-  const { promptForPermission, set, isAllowed, clear } = useAppBadge({
+  const { set, clear, requestPermission, isAllowed } = useAppBadge({
     favIcon
   })
   const allowed = (() => {
@@ -179,9 +179,6 @@ const AppBadge: React.FC<{
       clear()
     }
   }, [count, allowed, set, clear])
-  useEffect(() => {
-    promptForPermission().catch(noop)
-  }, [promptForPermission])
   return null
 }
 

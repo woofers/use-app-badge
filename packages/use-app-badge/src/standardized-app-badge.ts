@@ -1,12 +1,9 @@
-const isRecentSafari = () =>
-  window.matchMedia('@supports (hanging-punctuation: first)').matches
+export const isRecentSafari = () => navigator.vendor.startsWith('Apple')
 
 const isInstalled = () =>
   'matchMedia' in window &&
   window.matchMedia(
-    ['standalone', 'minimal-ui', 'window-controls-overlay']
-      .map(mode => `(display-mode: ${mode})`)
-      .join(', ')
+    '(display-mode: standalone), (display-mode: minimal-ui), (display-mode: window-controls-overlay)'
   ).matches
 
 const hasNotifcations = () => 'Notification' in window
