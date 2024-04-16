@@ -13,17 +13,14 @@ import {
   isRecentSafari
 } from './standardized-app-badge'
 import { generateIconFor } from './icon'
+import { buildPermissionAllowedError, buildSeverSideRenderError } from 'utils'
 
 const serverSnapshot = {
   isAppBadgeSupported: () => false,
-  clearAppBadge: () =>
-    Promise.reject<void>(
-      new Error("'clearAppBadge' can not be called on server")
-    ),
-  setAppBadge: (_?: number) =>
-    Promise.reject<void>(
-      new Error("'setAppBadge' can not be called on server")
-    ),
+  clearAppBadge: buildSeverSideRenderError('clearAppBadge'),
+  setAppBadge: buildSeverSideRenderError('setAppBadge') as (
+    contents?: number
+  ) => Promise<void>,
   requestAppBadgePermission: () => Promise.resolve(false)
 }
 
@@ -37,9 +34,6 @@ const snapshot = {
 const getServerSnapshot = () => serverSnapshot
 const getSnapshot = () => snapshot
 const emptySubscribe = () => () => {}
-
-const createAllowedError = () =>
-  new Error("'isAllowed()' was called before 'requestPermission()'")
 
 type FavIcon = Omit<Parameters<typeof generateIconFor>[0], 'content'>
 
@@ -78,7 +72,7 @@ const useAppBadge = (
       return true
     }
     if (typeof hasPermission === 'undefined') {
-      throw createAllowedError()
+      throw buildPermissionAllowedError()
     }
     return hasPermission
   }, [hasPermission, hasSupport])
@@ -127,14 +121,12 @@ const useAppBadge = (
     ]
   )
 
-  useEffect(() => {
-    if (!hasSupport) {
-      return
-    }
-    return () => {
+  useEffect(
+    () => () => {
       data.clear().catch(noop)
-    }
-  }, [data.clear, hasSupport])
+    },
+    [data.clear]
+  )
   useEffect(() => {
     const generateIcon = !isAllowed() && hasIcon
     if (generateIcon) {
@@ -163,7 +155,7 @@ const AppBadge: React.FC<{
   favIcon?: FavIcon
   count: number
 }> = ({ favIcon = false as unknown as FavIcon, count }) => {
-  const { set, clear, requestPermission, isAllowed } = useAppBadge({
+  const { set, clear, isAllowed } = useAppBadge({
     favIcon
   })
   const allowed = (() => {

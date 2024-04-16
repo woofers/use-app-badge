@@ -1,3 +1,7 @@
+declare global {
+  var __isDev__: boolean
+}
+
 export const isRecentSafari = () => navigator.vendor.startsWith('Apple')
 
 const isInstalled = () =>
@@ -42,9 +46,13 @@ const bindFunc =
   ) =>
   (...args: Parameters<Navigator[K]>) => {
     if (!(key in navigator)) {
-      throw new DOMException(
-        `Failed to execute '${key}': Badge API not supported in browser or attempted to run in an insecure-context`
-      )
+      // istanbul ignore next
+      if (__isDev__) {
+        throw new DOMException(
+          `Failed to execute '${key}': Badge API not supported in browser or attempted to run in an insecure-context`
+        )
+      }
+      throw new DOMException(`Badge API not supported`)
     }
     return (navigator[key] as unknown as F)(...args)
   }
