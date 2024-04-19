@@ -13,7 +13,7 @@ import {
   isRecentSafari
 } from './standardized-app-badge'
 import { generateIconFor } from './icon'
-import { buildPermissionAllowedError, buildSeverSideRenderError } from 'utils'
+import { buildPermissionAllowedError, buildSeverSideRenderError } from './utils'
 
 const serverSnapshot = {
   isAppBadgeSupported: () => false,
@@ -139,7 +139,8 @@ const useAppBadge = (
           textColor
         })
         setBadge(icon)
-        const meta = (document.querySelector('link[rel="icon"]') || {}) as {
+        const meta = (document.querySelector('link[rel="icon"]:not([media])') ||
+          {}) as {
           href: string
         }
         if (meta) meta.href = icon

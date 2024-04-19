@@ -48,8 +48,13 @@ const bindFunc =
     if (!(key in navigator)) {
       // istanbul ignore next
       if (__isDev__) {
+        if (typeof window === 'undefined') {
+          throw new DOMException(
+            `Failed to execute '${key}': Badge API not supported in browser`
+          )
+        }
         throw new DOMException(
-          `Failed to execute '${key}': Badge API not supported in browser or attempted to run in an insecure-context`
+          `Failed to execute '${key}': Badge API attempted to run in an insecure-context`
         )
       }
       throw new DOMException(`Badge API not supported`)
