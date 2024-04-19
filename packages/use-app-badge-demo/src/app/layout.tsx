@@ -2,11 +2,12 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import favicon from '../images/favicon.ico'
+import { cx } from 'class-variance-authority'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
-  title: 'testuse-app-badge',
+  title: 'use-app-badge',
   description: '',
   icons: [
     {
@@ -30,7 +31,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={cx(inter.className, 'bg-background', 'text-secondary')}>
+        {children}
+      </body>
     </html>
   )
 }

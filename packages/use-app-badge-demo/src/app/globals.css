@@ -3,11 +3,7 @@
 @theme {
   --color-*: initial;
 
-  --color-gray-50: #f8fafc;
-  --color-gray-100: #f1f5f9;
-  --color-gray-200: #e2e8f0;
-  /* ... */
-  --color-green-800: #3f6212;
-  --color-green-900: #365314;
-  --color-green-950: #1a2e05;
+  --color-accent: #ffd4bd;
+  --color-background: #111110;
+  --color-secondary: #dbdbdb;
 }
