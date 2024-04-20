@@ -1,7 +1,3 @@
-declare global {
-  var __isDev__: boolean
-}
-
 const isRecentSafari = () => navigator.vendor.startsWith('Apple')
 
 const isInstalled = () =>
@@ -47,7 +43,7 @@ const bindFunc =
   (...args: Parameters<Navigator[K]>) => {
     if (!(key in navigator)) {
       // istanbul ignore next
-      if (__isDev__) {
+      if (process.env.NODE_ENV === 'development') {
         if (typeof window === 'undefined') {
           throw new DOMException(
             `Failed to execute '${key}': Badge API not supported in browser`

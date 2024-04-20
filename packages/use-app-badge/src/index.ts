@@ -11,18 +11,14 @@ import {
   clearAppBadge,
   setAppBadge,
   requestAppBadgePermission
-} from './standardized-app-badge'
+} from 'standardized-app-badge'
 import { generateIconFor } from './icon'
-
-declare global {
-  var __isDev__: boolean
-}
 
 const buildGenericError = () => new Error(`Badge API not supported`)
 
 const buildSeverSideRenderError = (func: string) => () => {
   // istanbul ignore next
-  if (__isDev__) {
+  if (process.env.NODE_ENV === 'development') {
     return Promise.reject<void>(
       new Error(`'${func}' can not be called on server`)
     )
@@ -87,12 +83,12 @@ const useAppBadge = (
     }
     if (typeof hasPermission === 'undefined') {
       // istanbul ignore next
-      if (__isDev__) {
-        return new Error(
+      if (process.env.NODE_ENV === 'development') {
+        throw new Error(
           "'isAllowed()' was called before 'requestPermission()'"
         )
       }
-      return buildGenericError()
+      throw buildGenericError()
     }
     return hasPermission
   }, [hasPermission])
@@ -191,8 +187,8 @@ const AppBadge: React.FC<{
   const allowed = (() => {
     try {
       return isAllowed()
-    } catch (_) { 
-      // pass 
+    } catch (_) {
+      // pass
     }
     return false
   })()
