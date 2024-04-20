@@ -2,7 +2,7 @@ declare global {
   var __isDev__: boolean
 }
 
-export const isRecentSafari = () => navigator.vendor.startsWith('Apple')
+const isRecentSafari = () => navigator.vendor.startsWith('Apple')
 
 const isInstalled = () =>
   'matchMedia' in window &&
@@ -20,7 +20,7 @@ export const isAppBadgeSupported = () =>
   'setAppBadge' in navigator
 
 const hasNotificationPermission = async () => {
-  let { state } = await navigator.permissions.query({
+  const { state } = await navigator.permissions.query({
     name: 'notifications'
   })
   return state
@@ -32,7 +32,7 @@ const requestNotificationPermission = async () => {
 }
 
 type NavigatorFunctionKey<K> = K extends keyof Navigator
-  ? Navigator[K] extends (...args: any[]) => any
+  ? Navigator[K] extends (...args: unknown[]) => unknown
     ? K
     : never
   : never
@@ -57,7 +57,7 @@ const bindFunc =
           `Failed to execute '${key}': Badge API attempted to run in an insecure-context`
         )
       }
-      throw new DOMException(`Badge API not supported`)
+      throw new DOMException('Badge API not supported')
     }
     return (navigator[key] as unknown as F)(...args)
   }
@@ -65,13 +65,22 @@ const bindFunc =
 export const clearAppBadge = bindFunc('clearAppBadge')
 export const setAppBadge = bindFunc('setAppBadge')
 
-export const requestAppBadgePermission = async () => {
+export const isAppBadgeAllowed = () => {
   if (!isAppBadgeSupported()) {
-    return false
+    return 'denied'
   } else if (!isRecentSafari()) {
-    return true
+    return 'granted'
   }
-  let state = await hasNotificationPermission()
+  return 'unknown'
+}
+
+type PermissionState = Awaited<ReturnType<typeof hasNotificationPermission>>
+
+export const requestAppBadgePermission = async () => {
+  let state = isAppBadgeAllowed() as PermissionState | 'unknown'
+  if (state === 'unknown') {
+    state = await hasNotificationPermission()
+  }
   if (state === 'prompt') {
     state = await requestNotificationPermission()
   }

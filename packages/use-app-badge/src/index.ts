@@ -7,13 +7,28 @@ import {
 } from 'react'
 import {
   isAppBadgeSupported,
+  isAppBadgeAllowed,
   clearAppBadge,
   setAppBadge,
-  requestAppBadgePermission,
-  isRecentSafari
+  requestAppBadgePermission
 } from './standardized-app-badge'
 import { generateIconFor } from './icon'
-import { buildPermissionAllowedError, buildSeverSideRenderError } from './utils'
+
+declare global {
+  var __isDev__: boolean
+}
+
+const buildGenericError = () => new Error(`Badge API not supported`)
+
+const buildSeverSideRenderError = (func: string) => () => {
+  // istanbul ignore next
+  if (__isDev__) {
+    return Promise.reject<void>(
+      new Error(`'${func}' can not be called on server`)
+    )
+  }
+  return Promise.reject<void>(buildGenericError())
+}
 
 const serverSnapshot = {
   isAppBadgeSupported: () => false,
@@ -21,7 +36,7 @@ const serverSnapshot = {
   setAppBadge: buildSeverSideRenderError('setAppBadge') as (
     contents?: number
   ) => Promise<void>,
-  requestAppBadgePermission: () => Promise.resolve(false)
+  requestAppBadgePermission: async () => false
 }
 
 const snapshot = {
@@ -37,21 +52,21 @@ const emptySubscribe = () => () => {}
 
 type FavIcon = Omit<Parameters<typeof generateIconFor>[0], 'content'>
 
+const defaultFavIcon = false as unknown as FavIcon
+
 const noop = () => {}
 const useAppBadge = (
-  { favIcon }: { favIcon: FavIcon | false } = { favIcon: false }
+  { favIcon }: { favIcon: FavIcon } = { favIcon: defaultFavIcon }
 ) => {
   const {
     setAppBadge: set,
     clearAppBadge: clear,
-    isAppBadgeSupported,
+    isAppBadgeSupported: isSupported,
     requestAppBadgePermission
   } = useSyncExternalStore(emptySubscribe, getSnapshot, getServerSnapshot)
   const [hasPermission, setPermission] = useState<boolean | undefined>()
   const [count, setCount] = useState(0)
-  const hasSupport = isAppBadgeSupported()
-
-  const [badge, setBadge] = useState('')
+  const [icon, setIcon] = useState('')
   const hasIcon = !!favIcon
   const { src, badgeColor, badgeSize, textColor } = favIcon || {}
 
@@ -66,16 +81,21 @@ const useAppBadge = (
     }
   }, [requestAppBadgePermission])
   const isAllowed = useCallback(() => {
-    if (!hasSupport) {
-      return false
-    } else if (!isRecentSafari()) {
-      return true
+    const state = isAppBadgeAllowed()
+    if (state !== 'unknown') {
+      return state === 'granted'
     }
     if (typeof hasPermission === 'undefined') {
-      throw buildPermissionAllowedError()
+      // istanbul ignore next
+      if (__isDev__) {
+        return new Error(
+          "'isAllowed()' was called before 'requestPermission()'"
+        )
+      }
+      return buildGenericError()
     }
     return hasPermission
-  }, [hasPermission, hasSupport])
+  }, [hasPermission])
   const setAppBadge = useCallback(
     async (contents?: number) => {
       try {
@@ -98,7 +118,7 @@ const useAppBadge = (
       }
     }
     setCount(0)
-  }, [clear])
+  }, [clear, hasIcon])
   const data = useMemo(
     () =>
       ({
@@ -106,18 +126,18 @@ const useAppBadge = (
         clear: clearAppBadge,
         requestPermission,
         isAllowed,
-        isSupported: isAppBadgeSupported,
+        isSupported,
         count,
-        icon: badge
+        icon
       }) as const,
     [
       setAppBadge,
       clearAppBadge,
       requestPermission,
       isAllowed,
-      isAppBadgeSupported,
+      isSupported,
       count,
-      badge
+      icon
     ]
   )
 
@@ -125,11 +145,25 @@ const useAppBadge = (
     () => () => {
       data.clear().catch(noop)
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [data.clear]
   )
   useEffect(() => {
+    if (typeof window === 'undefined') {
+      return
+    }
     const generateIcon = !isAllowed() && hasIcon
-    if (generateIcon) {
+    const setBadge = (icon: string) => {
+      setIcon(icon)
+      const meta = (document.querySelector('link[rel="icon"]:not([media])') ||
+        {}) as {
+        href: string
+      }
+      if (meta) meta.href = icon
+    }
+    if (generateIcon && count <= 0) {
+      setBadge(src)
+    } else if (generateIcon) {
       const update = async () => {
         const icon = await generateIconFor({
           src,
@@ -139,11 +173,6 @@ const useAppBadge = (
           textColor
         })
         setBadge(icon)
-        const meta = (document.querySelector('link[rel="icon"]:not([media])') ||
-          {}) as {
-          href: string
-        }
-        if (meta) meta.href = icon
       }
       update()
     }
@@ -155,14 +184,16 @@ const useAppBadge = (
 const AppBadge: React.FC<{
   favIcon?: FavIcon
   count: number
-}> = ({ favIcon = false as unknown as FavIcon, count }) => {
+}> = ({ favIcon = defaultFavIcon, count }) => {
   const { set, clear, isAllowed } = useAppBadge({
     favIcon
   })
   const allowed = (() => {
     try {
       return isAllowed()
-    } catch (_) {}
+    } catch (_) { 
+      // pass 
+    }
     return false
   })()
   useEffect(() => {

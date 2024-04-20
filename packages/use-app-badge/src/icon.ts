@@ -22,13 +22,9 @@ const getProps = ({
     badgeSize
   }) as const
 
-const shouldDrawBadgeForContent = (content: number | string | boolean) =>
-  typeof content === 'number' ? content > 0 : !!content
-
-const shouldDrawTextForContent = (content: number | string | boolean) =>
-  typeof content === 'number' ? content > 0 : !!content
-
 const drawBadgeSize = 32
+const padding = 2
+const max = 99
 
 const createCanvas = () => {
   const canvas = document.createElement('canvas')
@@ -71,7 +67,7 @@ const getCanvas = (() => {
 })()
 
 const getImage = (() => {
-  let cache = {} as Record<string, HTMLImageElement>
+  const cache = {} as Record<string, HTMLImageElement>
   return (src: string) =>
     new Promise<HTMLImageElement>((resolve, reject) => {
       if (!(src in cache)) {
@@ -89,7 +85,6 @@ const getImage = (() => {
     })
 })()
 
-const padding = 2
 const drawBadgeCircle = (
   canvas: HTMLCanvasElement,
   context: CanvasRenderingContext2D,
@@ -109,6 +104,16 @@ const drawBadgeCircle = (
   context.fill()
 }
 
+const getContent = (content: string | number | boolean) =>
+  typeof content === 'number'
+    ? content > max
+      ? `${content}+`
+      : `${content}`
+    : `${content}`.slice(0, 2)
+
+const shouldDrawContent = (content: number | string | boolean) =>
+  typeof content === 'number' ? content > 0 : !!content
+
 export const generateIconFor = async (props: BadgeProps) => {
   const {
     src,
@@ -121,21 +126,19 @@ export const generateIconFor = async (props: BadgeProps) => {
   const image = await getImage(src)
   context.clearRect(0, 0, drawBadgeSize, drawBadgeSize)
   context.drawImage(image, 0, 0, drawBadgeSize, drawBadgeSize)
-  if (shouldDrawBadgeForContent(badge)) {
+  if (shouldDrawContent(badge)) {
     drawBadgeCircle(canvas, context, badgeColor, badgeSize)
-    if (shouldDrawTextForContent(badge)) {
-      context.textAlign = 'center'
-      context.textBaseline = 'middle'
-      context.fillStyle = textColor
-      const content = `${badge}`.slice(0, 2)
-      const doubleDigit = content.length > 1
-      context.font = `${doubleDigit ? 14 : 18}px sans-serif`
-      context.fillText(
-        content,
-        canvas.width - badgeSize / 2 - padding,
-        badgeSize / 2 + padding + 1
-      )
-    }
+    context.textAlign = 'center'
+    context.textBaseline = 'middle'
+    context.fillStyle = textColor
+    const content = getContent(badge)
+    const doubleDigit = content.length > 1
+    context.font = `${doubleDigit ? 14 : 18}px sans-serif`
+    context.fillText(
+      content,
+      canvas.width - badgeSize / 2 - padding,
+      badgeSize / 2 + padding + 1
+    )
   }
   const datastring = canvas.toDataURL('image/png')
   release()

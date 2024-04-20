@@ -18,6 +18,7 @@ module.exports = {
     root: true,
     rules: {
       'no-var': 0,
+      'react/prop-types': 0,
       '@typescript-eslint/no-unused-vars': ['error', { 'argsIgnorePattern': '^_' }],
       '@typescript-eslint/ban-types': [
         'error',
