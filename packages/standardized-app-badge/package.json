@@ -1,21 +1,23 @@
 {
   "name": "standardized-app-badge",
-  "version": "0.0.1",
+  "version": "0.1.1",
   "description": "",
   "sideEffects": false,  
   "main": "./lib/cjs/index.production.js",
   "module": "./lib/es/index.production.mjs",
   "types": "./lib/index.d.ts",
   "exports": {
-    "development": {
-      "types": "./lib/index.d.ts",
-      "import": "./lib/es/index.development.mjs",
-      "default": "./lib/cjs/index.development.js"
-    },
-    "production": {
-      "types": "./lib/index.d.ts",
-      "import": "./lib/es/index.production.mjs",
-      "default": "./lib/cjs/index.production.js"
+    ".": {
+      "development": {
+        "types": "./lib/index.d.ts",
+        "import": "./lib/es/index.development.mjs",
+        "default": "./lib/cjs/index.development.js"
+      },
+      "production": {
+        "types": "./lib/index.d.ts",
+        "import": "./lib/es/index.production.mjs",
+        "default": "./lib/cjs/index.production.js"
+      }
     }
   },
   "files": [
