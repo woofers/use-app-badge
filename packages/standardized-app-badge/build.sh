@@ -1,8 +1,8 @@
 cat > lib/cjs/index.js <<- "EOF"
 if (process.env.NODE_ENV !== 'development') {
-  module.exports = require('./indev.production.js')
+  module.exports = require('./index.production.js')
 } else {
-  module.exports = require('./indev.development.js')
+  module.exports = require('./index.development.js')
 }
 EOF
 
@@ -13,14 +13,14 @@ import {
   isAppBadgeSupported as iabs, 
   requestAppBadgePermission as rabp, 
   setAppBadge as sab
-} from './indev.production.mjs'
+} from './index.production.mjs'
 import {
   clearAppBadge as cabDev, 
   isAppBadgeAllowed as iabaDev, 
   isAppBadgeSupported as iabsDev, 
   requestAppBadgePermission as rabpDev, 
   setAppBadge as sabDev
-} from './indev.development.mjs'
+} from './index.development.mjs'
 
 export const clearAppBadge = process.env.NODE_ENV !== 'development' ? cab : cabDev
 export const isAppBadgeAllowed = process.env.NODE_ENV !== 'development' ? iaba : iabaDev
