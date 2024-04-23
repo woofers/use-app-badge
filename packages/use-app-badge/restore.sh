@@ -1,3 +1,3 @@
 pnpm pkg set 'main'='./lib/cjs/index.production.js' -ws 
 pnpm pkg set 'module'='./lib/es/index.production.mjs' -ws 
-bun replace-exports.js '{".":{"development":{"types":"./lib/index.d.ts","import":"./lib/es/index.development.mjs","default":"./lib/cjs/index.development.js"},"production":{"types":"./lib/index.d.ts","import":"./lib/es/index.production.mjs","default":"./lib/cjs/index.production.js"}}}'
+#bun replace-exports.js '{".":{"development":{"types":"./lib/index.d.ts","import":"./lib/es/index.development.mjs","default":"./lib/cjs/index.development.js"},"production":{"types":"./lib/index.d.ts","import":"./lib/es/index.production.mjs","default":"./lib/cjs/index.production.js"}}}'

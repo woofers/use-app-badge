@@ -50,7 +50,7 @@
     "react": "^0.13.0 || ^0.14.0 || >=15"
   },
   "dependencies": {
-    "standardized-app-badge": "^0.1.1"
+    "standardized-app-badge": "^0.1.2"
   },
   "devDependencies": {
     "@happy-dom/global-registrator": "^12.0.0",

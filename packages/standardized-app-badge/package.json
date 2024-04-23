@@ -1,10 +1,10 @@
 {
   "name": "standardized-app-badge",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "",
-  "sideEffects": false,  
-  "main": "./lib/cjs/index.production.js",
-  "module": "./lib/es/index.production.mjs",
+  "sideEffects": false,
+  "main": "./lib/cjs/index.js",
+  "module": "./lib/es/index.mjs",
   "types": "./lib/index.d.ts",
   "exports": {
     ".": {
@@ -27,8 +27,7 @@
     "README.md"
   ],
   "repository": "https://github.com/woofers/use-app-badge",
-  "keywords": [
-  ],
+  "keywords": [],
   "author": "Jaxson Van Doorn <jaxson.vandoorn@gmail.com>",
   "license": "MIT",
   "bugs": {
@@ -36,14 +35,13 @@
   },
   "homepage": "https://jaxs.onl/use-app-badge/",
   "scripts": {
-    "build": "bunchee -m",
+    "build": "bunchee -m && ./build.sh && ./restore.sh",
+    "build-publish": "bunchee -m && ./build.sh && npm publish && ./restore.sh",
     "dev": "bunchee --watch -m",
     "test": "bun typecheck",
     "lint": "eslint \"src/**/*.{jsx,js,tsx,ts}\"",
     "typecheck": "tsc --p .",
     "clean": "rimraf lib"
-  },
-  "dependencies": {
   },
   "devDependencies": {
     "@types/bun": "^1.0.12",
