@@ -6,7 +6,7 @@ Wraps the [Badging API](https://developer.mozilla.org/en-US/docs/Web/API/Badging
 into an cross-browser set of utilities for easier feature detection
 and a more consistent behaviour between browsers.
 
-![Badge API on Windows Taskbar](../../screenshots/windows.png "Badge API on Windows Taskbar")
+![Badge API on Windows Taskbar](./screenshots/windows.png "Badge API on Windows Taskbar")
 
 ## Features
 
