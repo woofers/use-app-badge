@@ -13,8 +13,8 @@
     "next": "14.2.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "standardized-app-badge": "npm:standardized-app-badge@0.1.4",
-    "use-app-badge": "npm:use-app-badge@0.1.4"
+    "standardized-app-badge": "workspace:*",
+    "use-app-badge": "workspace:*"
   },
   "devDependencies": {
     "@tailwindcss/cli": "4.0.0-alpha.14",
