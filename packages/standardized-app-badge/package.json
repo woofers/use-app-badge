@@ -3,8 +3,8 @@
   "version": "0.1.2",
   "description": "",
   "sideEffects": false,
-  "main": "./lib/cjs/index.js",
-  "module": "./lib/es/index.mjs",
+  "main": "./lib/cjs/index.production.js",
+  "module": "./lib/es/index.production.mjs",
   "types": "./lib/index.d.ts",
   "exports": {
     ".": {
