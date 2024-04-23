@@ -1,7 +1,7 @@
 {
   "name": "use-app-badge",
   "version": "0.1.2",
-  "description": "",
+  "description": "Navigator Badge API wrapper for React",
   "sideEffects": false,
   "main": "./lib/cjs/index.production.js",
   "module": "./lib/es/index.production.mjs",
@@ -28,8 +28,15 @@
   ],
   "repository": "https://github.com/woofers/use-app-badge",
   "keywords": [
+    "notification",
+    "badge",
+    "navigator",
     "react",
-    "reactjs"
+    "reactjs",
+    "cross-browser",
+    "push",
+    "dot",
+    "standardized"
   ],
   "author": "Jaxson Van Doorn <jaxson.vandoorn@gmail.com>",
   "license": "MIT",
@@ -50,7 +57,7 @@
     "react": "^0.13.0 || ^0.14.0 || >=15"
   },
   "dependencies": {
-    "standardized-app-badge": "^0.1.2"
+    "standardized-app-badge": "^0.1.3"
   },
   "devDependencies": {
     "@happy-dom/global-registrator": "^12.0.0",
