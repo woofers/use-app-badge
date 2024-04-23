@@ -9,7 +9,7 @@ and a more consistent behaviour between browsers.
 ## Features
 
 - TypeScript support
-- Under 570 bytes GZipped
+- Under 580 bytes GZipped
 - `setAppBadge` and `clearAppBadge` throw errors if webapp is not installed or running in an insecure context
 - Safely detect and fallback on unsupported browsers using `isAppBadgeSupported` method
 

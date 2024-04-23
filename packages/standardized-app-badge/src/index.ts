@@ -41,7 +41,8 @@ const bindFunc =
     key: K
   ) =>
   (...args: Parameters<Navigator[K]>) => {
-    if (!(key in navigator)) {
+    const supported = isAppBadgeSupported()
+    if (!(key in navigator) || !supported) {
       // istanbul ignore next
       if (process.env.NODE_ENV === 'development') {
         if (typeof window === 'undefined') {
