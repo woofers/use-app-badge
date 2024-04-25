@@ -74,6 +74,7 @@ if (isAppBadgeSupported()) {
 ## Methods
 
 - `setAppBadge(contents?: number) => Promise<void>` - `throws DOMException`
+
   Sets the app badge icon on the associated installed
   app either on the dock or taskbar.  If no
   value is passed, only a indicator dot will be shown.
@@ -82,7 +83,8 @@ if (isAppBadgeSupported()) {
   - The webpage must be installed as an app
   - Running over a secure-context (HTTPS)
   - Granted notification permission with `requestAppBadgePermission()` (for Safari iOS) 
-    or enabled in the app settings (for MacOS Safari). 
+  
+      or enabled in the app settings (for MacOS Safari). 
 
   This method will be resolve if set successfully or throw if:
   - The webpage is not installed as an app
@@ -98,7 +100,8 @@ if (isAppBadgeSupported()) {
   - The webpage must be installed as an app.
   - Running over a secure-context (HTTPS).
   - Granted notification permission with `requestAppBadgePermission()` (for Safari iOS) 
-    or enabled in the app settings (for MacOS Safari). 
+
+      or enabled in the app settings (for MacOS Safari). 
 
   This method will be resolve if set successfully or throw if:
   - The webpage is not installed as an app.
@@ -124,6 +127,7 @@ if (isAppBadgeSupported()) {
   - If the app badge is not supported, `'denied'` is returned.
   - If the webpage Chromium based, no permission is needed and `'granted'` is returned.
   - Otherwise the browser requires permission and `'unknown'` is returned.
+  
     In this case `requestAppBadgePermission()` should be called.
     Alternatively `navigator.permissions.query({ name: 'notifications' })` can be called
     if you only want to query the status without prompting but `requestAppBadgePermission()` does
