@@ -37,11 +37,12 @@ type NavigatorFunctionKey<K> = K extends keyof Navigator
 const bindFunc =
   <
     K extends NavigatorFunctionKey<keyof Navigator>,
-    F extends (...args: Parameters<Navigator[K]>) => ReturnType<Navigator[K]>
+    R extends Awaited<ReturnType<Navigator[K]>>,
+    F extends (...args: Parameters<Navigator[K]>) => Promise<R>
   >(
     key: K
   ) =>
-  async (...args: Parameters<Navigator[K]>) => {
+  async (...args: Parameters<Navigator[K]>): Promise<R> => {
     const state = isAppBadgeAllowed()
     if (!(key in navigator) || state === 'denied') {
       // istanbul ignore next
