@@ -33,12 +33,106 @@ yarn add standardized-app-badge
 npm install standardized-app-badge
 ```
 
-## API
+## Usage
 
 ```tsx
-export const isAppBadgeSupported: () => boolean;
-export const clearAppBadge: () => Promise<void>;
-export const setAppBadge: (contents?: number) => Promise<void>;
-export const isAppBadgeAllowed: () => "denied" | "granted" | "unknown";
-export const requestAppBadgePermission: () => Promise<boolean>;
+import { 
+  setAppBadge,
+  clearAppBadge, 
+  isAppBadgeSupported,
+  isAppBadgeAllowed,
+  requestAppBadgePermission
+} from 'standardized-app-badge'
+
+const button = document.getElementById('button')
+if (isAppBadgeSupported()) {
+  button.onclick = () => {
+    const request = async () => {
+      const canSetAppBadge = await requestAppBadgePermission()
+      if (canSetAppBadge) {
+        setTimeout(() => {
+          try {
+            await setAppBadge(1)
+            console.log('Set pending badge notification on dock or taskbar')
+          } catch (e) {
+            console.error('Could not set badge notification', e)
+          }
+        }, 1000)
+        setTimeout(() => void clearAppBadge(), [10_000])
+      } else {
+        console.log('Could not get badge notification permission')
+      }
+    }
+  }
+} else {
+  button.onclick = () => {
+    console.log('Unsupported browser')
+  }
+}
 ```
+
+## Methods
+
+- `setAppBadge(contents?: number) => Promise<void>` - `throws DOMException`
+  Sets the app badge icon on the associated installed
+  app either on the dock or taskbar.  If no
+  value is passed, only a indicator dot will be shown.
+
+  In-order for this method to work:
+  - The webpage must be installed as an app
+  - Running over a secure-context (HTTPS)
+  - Granted notification permission with `requestAppBadgePermission()` (for Safari iOS) 
+    or enabled in the app settings (for MacOS Safari). 
+
+  This method will be resolve if set successfully or throw if:
+  - The webpage is not installed as an app
+  - The webpage is running in an insecure-context (HTTP)
+  - The browser does not support API
+  - Permission was not granted (Safari)
+
+- `clearAppBadge() => Promise<void>` - `throws DOMException`
+  Clears the app badge icon on the associated installed
+  app either on the dock or taskbar.
+
+  In-order for this method to work:
+  - The webpage must be installed as an app.
+  - Running over a secure-context (HTTPS).
+  - Granted notification permission with `requestAppBadgePermission()` (for Safari iOS) 
+    or enabled in the app settings (for MacOS Safari). 
+
+  This method will be resolve if set successfully or throw if:
+  - The webpage is not installed as an app.
+  - The webpage is running in an insecure-context (HTTP).
+  - The browser does not support API.
+  - Permission was not granted (Safari).
+
+
+- `isAppBadgeSupported() => boolean`
+  Queries if the app badge is supported.
+
+  This method will check that:
+  - The browser supports the badge API.
+  - The webpage is running over a secure-context (HTTPS).
+  - The webpage is running & installed as an app.
+
+  However this method does not check if the permission 
+  to display the badge was granted (Safari only).
+  To do this call `isAppBadgeAllowed()`.
+
+- `isAppBadgeAllowed() => "denied" | "granted" | "unknown"`
+  Queries if the app badge has been granted permission.
+  - If the app badge is not supported, `'denied'` is returned.
+  - If the webpage Chromium based, no permission is needed and `'granted'` is returned.
+  - Otherwise the browser requires permission and `'unknown'` is returned.
+    In this case `requestAppBadgePermission()` should be called.
+    Alternatively `navigator.permissions.query({ name: 'notifications' })` can be called
+    if you only want to query the status without prompting but `requestAppBadgePermission()` does
+    this prior to prompting.
+
+- `requestAppBadgePermission() => Promise<boolean>`
+  Queries if the app badge needs permission or has been granted permission.
+  If permission is needed, it will prompt for the user to provide the permission.
+  - `false` is returned if the app badge is not supported or the method could not obtain permission.
+    This can happen if the user denies the prompt or has it blocked.
+  - `true` is returned if the app badge does not require any permission 
+     or if it succesfully obtained permission.
