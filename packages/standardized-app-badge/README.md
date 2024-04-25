@@ -3,8 +3,8 @@
 Cross-browser wrapper for Navigator Badge API
 
 Wraps the [Badging API](https://developer.mozilla.org/en-US/docs/Web/API/Badging_API)
-into an cross-browser set of utilities for easier feature detection
-and a more consistent behaviour between browsers.
+into a cross-browser set of utilities for easier feature detection
+and more consistent behaviour between browsers.
 
 ## Features
 
@@ -63,6 +63,7 @@ if (isAppBadgeSupported()) {
         console.log('Could not get badge notification permission')
       }
     }
+    void request()
   }
 } else {
   button.onclick = () => {
