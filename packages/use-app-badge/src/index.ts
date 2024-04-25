@@ -16,14 +16,12 @@ import { generateIconFor } from './icon'
 
 const buildGenericError = () => new Error(`Badge API not supported`)
 
-const buildSeverSideRenderError = (func: string) => () => {
+const buildSeverSideRenderError = (func: string) => async (): Promise<void> => {
   // istanbul ignore next
   if (process.env.NODE_ENV === 'development') {
-    return Promise.reject<void>(
-      new Error(`'${func}' can not be called on server`)
-    )
+    throw new Error(`'${func}' can not be called on server`)
   }
-  return Promise.reject<void>(buildGenericError())
+  throw buildGenericError()
 }
 
 const serverSnapshot = {
@@ -46,7 +44,9 @@ const getServerSnapshot = () => serverSnapshot
 const getSnapshot = () => snapshot
 const emptySubscribe = () => () => {}
 
-type FavIcon = Omit<Parameters<typeof generateIconFor>[0], 'content'>
+type FavIcon = Omit<Parameters<typeof generateIconFor>[0], 'content'> & {
+  updateMeta?: boolean
+}
 
 const defaultFavIcon = false as unknown as FavIcon
 
@@ -61,10 +61,17 @@ const useAppBadge = (
     requestAppBadgePermission
   } = useSyncExternalStore(emptySubscribe, getSnapshot, getServerSnapshot)
   const [hasPermission, setPermission] = useState<boolean | undefined>()
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(0 as number | true)
   const [icon, setIcon] = useState('')
   const hasIcon = !!favIcon
-  const { src, badgeColor, badgeSize, textColor } = favIcon || {}
+  const {
+    src,
+    badgeColor,
+    badgeSize,
+    textColor,
+    updateMeta: meta
+  } = favIcon || {}
+  const updateMeta = meta ?? true
 
   const requestPermission = useCallback(async () => {
     try {
@@ -99,7 +106,7 @@ const useAppBadge = (
           throw e
         }
       }
-      setCount(contents)
+      setCount(typeof contents !== 'number' ? true : contents)
     },
     [hasIcon, set]
   )
@@ -143,34 +150,46 @@ const useAppBadge = (
     [data.clear]
   )
   useEffect(() => {
+    if (typeof window === 'undefined' || !isAllowed() || !hasIcon) {
+      return
+    }
+    if (typeof count !== 'boolean' && count <= 0) {
+      setIcon(src)
+    }
+    const update = async () => {
+      const icon = await generateIconFor({
+        src,
+        content: count,
+        badgeColor,
+        badgeSize,
+        textColor
+      })
+      setIcon(icon)
+    }
+    void update()
+  }, [hasIcon, count, src, badgeColor, badgeSize, textColor, isAllowed])
+
+  useEffect(() => {
+    let ogMeta: string
     if (typeof window === 'undefined') {
       return
     }
-    const generateIcon = !isAllowed() && hasIcon
-    const setBadge = (icon: string) => {
-      setIcon(icon)
-      const meta = (document.querySelector('link[rel="icon"]:not([media])') ||
-        {}) as {
-        href: string
+    /* prettier-ignore */
+    const getElement = () => (document.querySelector('link[rel="icon"]:not([media])') || {}) as { href: string }
+    if (updateMeta && icon) {
+      const meta = getElement()
+      if (meta) {
+        if (typeof ogMeta === 'undefined') ogMeta = meta.href
+        meta.href = icon
       }
-      if (meta) meta.href = icon
     }
-    if (generateIcon && count <= 0) {
-      setBadge(src)
-    } else if (generateIcon) {
-      const update = async () => {
-        const icon = await generateIconFor({
-          src,
-          content: count,
-          badgeColor,
-          badgeSize,
-          textColor
-        })
-        setBadge(icon)
+    return () => {
+      const element = getElement()
+      if (element && typeof ogMeta !== 'undefined') {
+        element.href = ogMeta
       }
-      update()
     }
-  }, [hasIcon, count, src, badgeColor, badgeSize, textColor, isAllowed])
+  }, [icon, updateMeta])
 
   return data
 }

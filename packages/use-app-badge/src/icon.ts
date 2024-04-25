@@ -105,11 +105,13 @@ const drawBadgeCircle = (
 }
 
 const getContent = (content: string | number | boolean) =>
-  typeof content === 'number'
-    ? content > max
-      ? `${content}+`
-      : `${content}`
-    : `${content}`.slice(0, 2)
+  typeof content === 'boolean' && content
+    ? ''
+    : typeof content === 'number'
+      ? content > max
+        ? `${content}+`
+        : `${content}`
+      : `${content}`.slice(0, 2)
 
 const shouldDrawContent = (content: number | string | boolean) =>
   typeof content === 'number' ? content > 0 : !!content
@@ -132,13 +134,15 @@ export const generateIconFor = async (props: BadgeProps) => {
     context.textBaseline = 'middle'
     context.fillStyle = textColor
     const content = getContent(badge)
-    const doubleDigit = content.length > 1
-    context.font = `${doubleDigit ? 14 : 18}px sans-serif`
-    context.fillText(
-      content,
-      canvas.width - badgeSize / 2 - padding,
-      badgeSize / 2 + padding + 1
-    )
+    if (content) {
+      const doubleDigit = content.length > 1
+      context.font = `${doubleDigit ? 14 : 18}px sans-serif`
+      context.fillText(
+        content,
+        canvas.width - badgeSize / 2 - padding,
+        badgeSize / 2 + padding + 1
+      )
+    }
   }
   const datastring = canvas.toDataURL('image/png')
   release()
