@@ -73,7 +73,9 @@ if (isAppBadgeSupported()) {
 
 ## Methods
 
-`setAppBadge(contents?: number) => Promise<void>` - `throws DOMException`
+```tsx
+setAppBadge(contents?: number) => Promise<void>
+``` - `throws DOMException`
 
   Sets the app badge icon on the associated installed
   app either on the dock or taskbar.  If no
