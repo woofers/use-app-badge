@@ -74,26 +74,22 @@ if (isAppBadgeSupported()) {
 ## Methods
 
 ```tsx
-setAppBadge(contents?: number) => Promise<void>
-``` 
-- `throws DOMException`
+setAppBadge(contents?: number) => Promise<void> // throws DOMException
+```
 
-  Sets the app badge icon on the associated installed
-  app either on the dock or taskbar.  If no
-  value is passed, only a indicator dot will be shown.
-
-  In-order for this method to work:
-  - The webpage must be installed as an app
-  - Running over a secure-context (HTTPS)
-  - Granted notification permission with `requestAppBadgePermission()` (for Safari iOS) 
-  
-      or enabled in the app settings (for MacOS Safari). 
-
-  This method will be resolve if set successfully or throw if:
-  - The webpage is not installed as an app
-  - The webpage is running in an insecure-context (HTTP)
-  - The browser does not support API
-  - Permission was not granted (Safari)
+Sets the app badge icon on the associated installed
+app either on the dock or taskbar.  If no
+value is passed, only a indicator dot will be shown.
+In-order for this method to work:
+- The webpage must be installed as an app
+- Running over a secure-context (HTTPS)
+- Granted notification permission with `requestAppBadgePermission()` (for Safari iOS) 
+  or enabled in the app settings (for MacOS Safari). 
+This method will be resolve if set successfully or throw if:
+- The webpage is not installed as an app
+- The webpage is running in an insecure-context (HTTP)
+- The browser does not support API
+- Permission was not granted (Safari)
 
 `clearAppBadge() => Promise<void>` - `throws DOMException`
   Clears the app badge icon on the associated installed
