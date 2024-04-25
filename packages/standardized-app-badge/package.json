@@ -1,6 +1,6 @@
 {
   "name": "standardized-app-badge",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "Cross-browser wrapper for Navigator Badge API",
   "sideEffects": false,
   "main": "./lib/cjs/index.production.js",
