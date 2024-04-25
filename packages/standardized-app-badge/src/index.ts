@@ -10,7 +10,7 @@ const hasNotifcations = () => 'Notification' in window
 
 export const isAppBadgeSupported = () =>
   typeof window !== 'undefined' &&
-  window.location.protocol === 'https:' &&
+  location.protocol === 'https:' &&
   hasNotifcations() &&
   isInstalled() &&
   navigator &&
