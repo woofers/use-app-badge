@@ -6,11 +6,11 @@ const isInstalled = () =>
     '(display-mode: standalone), (display-mode: minimal-ui), (display-mode: window-controls-overlay)'
   ).matches
 
-const hasNotifcations = () => 'Notification' in window 
+const hasNotifcations = () => 'Notification' in window
 
 export const isAppBadgeSupported = () =>
   typeof window !== 'undefined' &&
-  window.location.protocol === 'https:'
+  window.location.protocol === 'https:' &&
   hasNotifcations() &&
   isInstalled() &&
   navigator &&
@@ -41,9 +41,9 @@ const bindFunc =
   >(
     key: K
   ) =>
-  (...args: Parameters<Navigator[K]>) => {
-    const supported = isAppBadgeSupported()
-    if (!(key in navigator) || !supported) {
+  async (...args: Parameters<Navigator[K]>) => {
+    const state = isAppBadgeAllowed()
+    if (!(key in navigator) || state === 'denied') {
       // istanbul ignore next
       if (process.env.NODE_ENV === 'development') {
         if (typeof window === 'undefined') {
@@ -57,9 +57,11 @@ const bindFunc =
       }
       throw new DOMException('Badge API not supported')
     }
-    return (navigator[key] as unknown as F)(...args)
+    const allowed =
+      state !== 'unknown' || (await hasNotificationPermission()) !== 'granted'
+    if (!allowed) throw new DOMException('Badge API permission denied')
+    return await (navigator[key] as unknown as F)(...args)
   }
-
 
 export const clearAppBadge = bindFunc('clearAppBadge')
 export const setAppBadge = bindFunc('setAppBadge')

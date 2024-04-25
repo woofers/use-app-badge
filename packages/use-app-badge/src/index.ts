@@ -84,9 +84,7 @@ const useAppBadge = (
     if (typeof hasPermission === 'undefined') {
       // istanbul ignore next
       if (process.env.NODE_ENV === 'development') {
-        throw new Error(
-          "'isAllowed()' was called before 'requestPermission()'"
-        )
+        throw new Error("'isAllowed()' was called before 'requestPermission()'")
       }
       throw buildGenericError()
     }

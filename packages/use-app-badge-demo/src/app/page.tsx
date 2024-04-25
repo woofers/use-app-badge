@@ -33,7 +33,12 @@ export default function Home() {
                   : '[transform:scale(0)_translateX(13px)]'
               )}
             >
-              <div className={cx(atMax ? 'text-[17px]' : 'text-2xl', "font-bold absolute top-0 left-0 w-[40px] h-[40px] flex items-center justify-center")}>
+              <div
+                className={cx(
+                  atMax ? 'text-[17px]' : 'text-2xl',
+                  'font-bold absolute top-0 left-0 w-[40px] h-[40px] flex items-center justify-center'
+                )}
+              >
                 {atMax ? '99+' : count}
               </div>
             </div>
