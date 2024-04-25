@@ -93,7 +93,7 @@ This method will be resolve if set successfully or throw if:
 - The browser does not support API
 - Permission was not granted (Safari)
 
----
+#
 
 ```tsx
 clearAppBadge() => Promise<void> // throws DOMException
