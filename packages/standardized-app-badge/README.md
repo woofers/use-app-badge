@@ -114,6 +114,8 @@ This method will be resolve if set successfully or throw if:
 - The browser does not support API.
 - Permission was not granted (Safari).
 
+#
+
 ```tsx
 isAppBadgeSupported() => boolean
 ```
@@ -128,6 +130,8 @@ However this method does not check if the permission
 to display the badge was granted (Safari only).
 To do this call `isAppBadgeAllowed()`.
 
+#
+
 ```tsx
 isAppBadgeAllowed() => "denied" | "granted" | "unknown"
 ```
@@ -140,6 +144,8 @@ Queries if the app badge has been granted permission.
   Alternatively `navigator.permissions.query({ name: 'notifications' })` can be called
   if you only want to query the status without prompting but `requestAppBadgePermission()` does
   this prior to prompting.
+
+#
 
 ```tsx
 requestAppBadgePermission() => Promise<boolean>
