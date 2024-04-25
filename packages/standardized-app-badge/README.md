@@ -81,17 +81,18 @@ setAppBadge(contents?: number) => Promise<void> // throws DOMException
 Sets the app badge icon on the associated installed
 app either on the dock or taskbar.  If no
 value is passed, only a indicator dot will be shown.
+Otherwise the notification count is displayed.
 
 In-order for this method to work:
-- The webpage must be installed as an app
-- Running over a secure-context (HTTPS)
+- The webpage must be installed as an app.
+- Running over a secure-context (HTTPS).
 - Granted notification permission with `requestAppBadgePermission()` (for Safari iOS) 
   or enabled in the app settings (for MacOS Safari). 
 
-This method will be resolve if set successfully or throw if:
-- The webpage is not installed as an app
-- The webpage is running in an insecure-context (HTTP)
-- The browser does not support API
+This method will resolve if set successfully or throw an error if:
+- The webpage is not installed as an app.
+- The webpage is running in an insecure-context (HTTP).
+- The browser does not support API.
 - Permission was not granted (Safari)
 
 #
@@ -109,7 +110,7 @@ In-order for this method to work:
 - Granted notification permission with `requestAppBadgePermission()` (for Safari iOS) 
   or enabled in the app settings (for MacOS Safari).
 
-This method will be resolve if set successfully or throw if:
+This method will resolve if set successfully or throw an error if:
 - The webpage is not installed as an app.
 - The webpage is running in an insecure-context (HTTP).
 - The browser does not support API.
@@ -129,7 +130,7 @@ This method will check that:
 
 However this method does not check if the permission 
 to display the badge was granted (Safari only).
-To do this call `isAppBadgeAllowed()`.
+In-order to do this call `isAppBadgeAllowed()`.
 
 #
 
