@@ -8,6 +8,8 @@ type BadgeOptions = {
 
 type BadgeProps = Partial<BadgeOptions> & { src: string }
 
+export type FavIcon = Omit<BadgeProps, 'content'> & { updateMeta?: boolean }
+
 const getProps = ({
   src,
   content = false,

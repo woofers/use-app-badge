@@ -12,7 +12,7 @@ import {
   setAppBadge,
   requestAppBadgePermission
 } from 'standardized-app-badge'
-import { generateIconFor } from './icon'
+import type { FavIcon } from './icon'
 
 declare global {
   module globalThis {
@@ -49,10 +49,6 @@ const snapshot = {
 const getServerSnapshot = () => serverSnapshot
 const getSnapshot = () => snapshot
 const emptySubscribe = () => () => {}
-
-type FavIcon = Omit<Parameters<typeof generateIconFor>[0], 'content'> & {
-  updateMeta?: boolean
-}
 
 const defaultFavIcon = false as unknown as FavIcon
 
@@ -164,6 +160,7 @@ const useAppBadge = (
       setIcon(src)
     }
     const update = async () => {
+      const { generateIconFor } = await import('./icon')
       const icon = await generateIconFor({
         src,
         content: count,
