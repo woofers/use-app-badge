@@ -53,7 +53,6 @@
   },
   "devDependencies": {
     "@types/bun": "^1.0.12",
-    "@types/node": "^20.12.7",
     "bunchee": "^5.1.2",
     "prettier": "^3.0.3",
     "rimraf": "^5.0.1",

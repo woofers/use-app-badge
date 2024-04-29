@@ -19,9 +19,5 @@
   "devDependencies": {
     "prettier": "^3.2.5",
     "turbo": "^1.13.2"
-  },
-  "overrides": {
-    "use-app-badge": "~0.1.5",
-    "standardized-app-badge": "~0.1.5"
   }
 }
