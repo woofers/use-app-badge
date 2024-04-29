@@ -196,7 +196,7 @@ const useAppBadge = (
 
 const AppBadge: React.FC<{
   favIcon?: FavIcon
-  count: number
+  count: number | true
 }> = ({ favIcon = defaultFavIcon, count }) => {
   const { set, clear, isAllowed } = useAppBadge({
     favIcon
@@ -210,8 +210,9 @@ const AppBadge: React.FC<{
     return false
   })()
   useEffect(() => {
-    if (count > 0) {
-      set(count)
+    const isSet = typeof count === 'boolean'
+    if (isSet || count > 0) {
+      !isSet ? set(count) : set()
     } else {
       clear()
     }

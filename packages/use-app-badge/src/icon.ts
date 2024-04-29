@@ -1,3 +1,4 @@
+
 type BadgeOptions = {
   content: number | string | boolean
   badgeColor: string
@@ -33,38 +34,33 @@ const createCanvas = () => {
   return canvas
 }
 
-const delay = (ms: number) =>
-  new Promise<void>(resolve => setTimeout(() => resolve(), ms))
-
-const getCanvas = (() => {
-  let canvas: HTMLCanvasElement
-  let context: CanvasRenderingContext2D
-  let inUse = false
-  return async () => {
-    let retry = 0
-    if (!canvas) {
-      canvas = createCanvas()
+const makePool = <T,>(create: () => T) => {
+  let pool = [] as T[]
+  let available = [] as number[]
+  const get = () => {
+    if (available.length > 0) {
+      const lastAvailable = available.pop()
+      return [
+        pool[lastAvailable],
+        () => { available.push(lastAvailable) },
+      ] as const
     }
-    if (!context) {
-      context = canvas.getContext('2d')
-    }
-    while (inUse && 10 >= retry) {
-      await delay(3 > retry ? 200 : 750)
-      retry += 1
-    }
-    if (inUse) {
-      throw new Error('Could not get canvas context')
-    }
-    inUse = true
+    const element = create()
+    pool.push(element)
+    const at = pool.length - 1
     return [
-      canvas,
-      context,
-      () => {
-        inUse = false
-      }
+      element,
+      () => { available.push(at) }
     ] as const
   }
-})()
+  return get
+}
+
+const getCanvasFromPool = makePool(() => {
+  const canvas = createCanvas()
+  const context = canvas.getContext('2d')
+  return [canvas, context] as const
+})
 
 const getImage = (() => {
   const cache = {} as Record<string, HTMLImageElement>
@@ -124,7 +120,7 @@ export const generateIconFor = async (props: BadgeProps) => {
     badgeColor,
     badgeSize
   } = getProps(props)
-  const [canvas, context, release] = await getCanvas()
+  const [[canvas, context], release] = await getCanvasFromPool()
   const image = await getImage(src)
   context.clearRect(0, 0, drawBadgeSize, drawBadgeSize)
   context.drawImage(image, 0, 0, drawBadgeSize, drawBadgeSize)
