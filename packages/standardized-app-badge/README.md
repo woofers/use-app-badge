@@ -44,32 +44,37 @@ import {
   requestAppBadgePermission
 } from 'standardized-app-badge'
 
-const button = document.getElementById('button')
+const button = document.createElement('button')
+button.innerHTML = "Set app badge and clear after 10s seconds"
 if (isAppBadgeSupported()) {
   button.onclick = () => {
     const request = async () => {
       const canSetAppBadge = await requestAppBadgePermission()
       if (canSetAppBadge) {
         setTimeout(() => {
-          try {
-            await setAppBadge(1)
-            console.log('Set pending badge notification on dock or taskbar')
-          } catch (e) {
-            console.error('Could not set badge notification', e)
+          const set = async () => {
+            try {
+              await setAppBadge(1)
+              console.log('Set pending badge notification on dock or taskbar')
+            } catch (e) {
+              console.error('Could not set badge notification', e)
+            }
           }
+          void set()
         }, 1000)
         setTimeout(() => void clearAppBadge(), [10_000])
       } else {
-        console.log('Could not get badge notification permission')
+        console.warn('Could not get badge notification permission')
       }
     }
     void request()
   }
 } else {
   button.onclick = () => {
-    console.log('Unsupported browser')
+    console.warn('Unsupported browser')
   }
 }
+document.body.append(button)
 ```
 
 ## Methods
