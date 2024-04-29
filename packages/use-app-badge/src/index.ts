@@ -135,6 +135,7 @@ const useAppBadge = (
         isAllowed,
         isSupported,
         count,
+        countAsNumber: Number(count),
         icon
       }) as const,
     [
