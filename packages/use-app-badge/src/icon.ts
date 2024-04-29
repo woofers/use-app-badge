@@ -120,7 +120,7 @@ export const generateIconFor = async (props: BadgeProps) => {
     badgeColor,
     badgeSize
   } = getProps(props)
-  const [[canvas, context], release] = await getCanvasFromPool()
+  const [[canvas, context], release] = getCanvasFromPool()
   const image = await getImage(src)
   context.clearRect(0, 0, drawBadgeSize, drawBadgeSize)
   context.drawImage(image, 0, 0, drawBadgeSize, drawBadgeSize)

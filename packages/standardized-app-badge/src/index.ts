@@ -1,3 +1,9 @@
+declare global {
+  module globalThis {
+    var process: { env: { NODE_ENV: string } }
+  }
+}
+
 const isRecentSafari = () => navigator.vendor.startsWith('Apple')
 
 const isInstalled = () =>

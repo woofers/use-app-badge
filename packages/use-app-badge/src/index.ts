@@ -14,6 +14,12 @@ import {
 } from 'standardized-app-badge'
 import { generateIconFor } from './icon'
 
+declare global {
+  module globalThis {
+    var process: { env: { NODE_ENV: string } }
+  }
+}
+
 const buildGenericError = () => new Error(`Badge API not supported`)
 
 const buildSeverSideRenderError = (func: string) => async (): Promise<void> => {
@@ -150,7 +156,7 @@ const useAppBadge = (
     [data.clear]
   )
   useEffect(() => {
-    if (typeof window === 'undefined' || !isAllowed() || !hasIcon) {
+    if (typeof window === 'undefined' || isAllowed() || !hasIcon) {
       return
     }
     if (typeof count !== 'boolean' && count <= 0) {
