@@ -26,7 +26,7 @@
     "package.json",
     "README.md"
   ],
-  "repository": "https://github.com/woofers/use-app-badge",
+  "repository": { "url": "git+https://github.com/woofers/use-app-badge.git" },
   "keywords": [
     "notification",
     "badge",
