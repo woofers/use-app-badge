@@ -153,7 +153,7 @@ const useAppBadge = (
     [data.clear]
   )
   useEffect(() => {
-    if (typeof window === 'undefined' || isAllowed() || !hasIcon) {
+    if (typeof window === 'undefined' || isAppBadgeAllowed() === 'granted' || !hasIcon) {
       return
     } else if (typeof count !== 'boolean' && count <= 0) {
       setIcon(src)
@@ -194,7 +194,6 @@ const useAppBadge = (
       }
     }
   }, [icon, updateMeta])
-
   return data
 }
 
