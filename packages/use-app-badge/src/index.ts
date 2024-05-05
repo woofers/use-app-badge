@@ -155,9 +155,9 @@ const useAppBadge = (
   useEffect(() => {
     if (typeof window === 'undefined' || isAllowed() || !hasIcon) {
       return
-    }
-    if (typeof count !== 'boolean' && count <= 0) {
+    } else if (typeof count !== 'boolean' && count <= 0) {
       setIcon(src)
+      return
     }
     const update = async () => {
       const { generateIconFor } = await import('./icon')
@@ -170,7 +170,7 @@ const useAppBadge = (
       })
       setIcon(icon)
     }
-    void update()
+    update().catch(noop)
   }, [hasIcon, count, src, badgeColor, badgeSize, textColor, isAllowed])
 
   useEffect(() => {
