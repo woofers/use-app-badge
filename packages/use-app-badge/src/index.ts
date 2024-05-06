@@ -175,7 +175,7 @@ const useAppBadge = (
 
   useEffect(() => {
     let ogMeta: string
-    if (typeof window === 'undefined') {
+    if (typeof window === 'undefined' || !hasIcon) {
       return
     }
     /* prettier-ignore */
@@ -193,7 +193,7 @@ const useAppBadge = (
         element.href = ogMeta
       }
     }
-  }, [icon, updateMeta])
+  }, [icon, updateMeta, hasIcon])
   return data
 }
 
