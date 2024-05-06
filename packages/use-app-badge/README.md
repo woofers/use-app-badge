@@ -285,6 +285,25 @@ If permission is needed, it will prompt for the user to provide the permission.
 
 ## \<AppBadge /\>
 
+Using this `AppBadge` component API allows the badge value to be set imperatively.
+This is useful if you have an existing piece of state you want to sync with.
+
+**NOTE:** This API does not offer a way to request permission for Safari.  If you
+want to do this, you can use the hook alongside the component.  However
+if `favIcon` is set on one API, it should be dropped from the other to avoid having clashes.
+
+```tsx
+const App = () => {
+  const { requestPermission } = useAppBadge()
+  const [unread, setUnread] = useState(5)
+  return (
+    <>
+      <AppBadge count={count} favIcon={{ src: './favicon.ico' }}/>
+      <button onClick={() => void requestPermission()}>Request permission</button>
+    </>
+  )
+}
+
 **Props**
 
 ```tsx
@@ -292,8 +311,6 @@ count: number
 ```
 
 The value that the app badge should be set to.
-
-Using this component API allows the value to be set imperatively 
 
 #
 
