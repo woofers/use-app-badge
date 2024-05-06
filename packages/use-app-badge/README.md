@@ -282,3 +282,26 @@ If permission is needed, it will prompt for the user to provide the permission.
   This can happen if the user denies the prompt or has it blocked.
 - `true` is returned if the app badge does not require any permission 
    or if it succesfully obtained permission.
+
+## <AppBadge />
+
+**Props**
+
+```tsx
+count: number
+```
+
+The value that the app badge should be set to.
+
+Using this component API allows the value to be set imperatively 
+
+#
+
+```tsx
+favIcon?: FavIcon
+```
+
+Options for the favicon generation if the Badge API is unavailable.
+See the above options.
+
+#
