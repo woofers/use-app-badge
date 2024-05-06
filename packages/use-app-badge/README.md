@@ -38,31 +38,6 @@ npm install use-app-badge
 ## API
 
 ```tsx
-type FavIcon = {
-  src: string
-  content?: number | string | boolean
-  badgeColor?: string
-  textColor?: string
-  badgeSize?: number
-  pdateMeta?: boolean;
-}
-
-const useAppBadge = ({ favIcon }?: { favIcon: FavIcon; }): {
-  set: (contents?: number) => Promise<void>
-  clear: () => Promise<void>
-  requestPermission: () => Promise<boolean>
-  isAllowed: () => boolean
-  isSupported: () => boolean
-  count: number | true
-  countAsNumber: number
-  icon: string
-}
-
-const AppBadge = ({ favIcon, count }: { favIcon?: FavIcon; count: number }): JSX.Element
-```
-
-
-```tsx
 import { AppBadge, useAppBadgae } from 'use-app-badge'
 
 const App: React.FC<{}> = () => {
@@ -303,6 +278,7 @@ const App = () => {
     </>
   )
 }
+```
 
 **Props**
 
