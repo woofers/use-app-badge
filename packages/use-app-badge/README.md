@@ -283,7 +283,7 @@ If permission is needed, it will prompt for the user to provide the permission.
 - `true` is returned if the app badge does not require any permission 
    or if it succesfully obtained permission.
 
-## <AppBadge />
+## \<AppBadge /\>
 
 **Props**
 
