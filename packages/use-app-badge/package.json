@@ -1,6 +1,6 @@
 {
   "name": "use-app-badge",
-  "version": "0.1.9",
+  "version": "0.2.0",
   "description": "Navigator Badge API wrapper for React",
   "sideEffects": false,
   "main": "./lib/cjs/index.production.js",
@@ -59,7 +59,7 @@
     "react": ">=18"
   },
   "dependencies": {
-    "standardized-app-badge": "^0.1.9"
+    "standardized-app-badge": "^0.2.0"
   },
   "devDependencies": {
     "@happy-dom/global-registrator": "^12.0.0",
