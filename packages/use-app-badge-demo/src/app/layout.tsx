@@ -9,6 +9,12 @@ const inter = Inter({ subsets: ['latin'] })
 export const metadata = {
   title: 'use-app-badge',
   description: '',
+  manifest: '/manifest.webmanifest',
+  themeColor: '#151516',
+  metadataBase:
+    process.env.NODE_ENV === 'production'
+      ? new URL('https://jaxs.onl/use-app-badge')
+      : new URL('https://scaling-garbanzo-xqj5rgq545f9qw-3000.app.github.dev/'),
   icons: [
     {
       rel: 'icon',
@@ -31,6 +37,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <script type="text/javascript" dangerouslySetInnerHTML={{ __html: `navigator.serviceWorker.register('sw.js')` }} />
+      </head>
       <body className={cx(inter.className, 'bg-background', 'text-secondary')}>
         {children}
       </body>
