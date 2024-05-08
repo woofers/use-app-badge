@@ -1,0 +1,61 @@
+name: useEyeDropper
+
+on: [push]
+
+jobs:
+  install:
+    name: Install
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Repo
+      uses: actions/checkout@v4
+    - name: Install Bun
+      uses: oven-sh/setup-bun@v1
+      with:
+        bun-version: 11.1.7
+  build-standardized-app-badge:
+    name: Build standardized-app-badge
+    needs: build-standardized-app-badge
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+      - name: Install Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: 11.1.7
+      - name: Install + Build
+        uses: bun run --cwd packages/standardized-app-badge build 
+  build-use-app-badge:
+    name: Build use-app-badge
+    needs: install
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+      - name: Install Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: 11.1.7
+      - name: Install + Build
+        uses: bun run --cwd packages/use-app-badge build
+  build-demo:
+    name: Build Demo
+    needs: build-use-app-badge
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+      - name: Install Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: 11.1.7
+      - name: Install + Build
+        uses: bun install --production && bun run --cwd packages/use-app-badge-demo build  
+      - name: Publish Demo
+        uses: JamesIves/github-pages-deploy-action@v4.5.0
+        with:
+          branch: gh-pages
+          folder: packages/use-app-badge-demo/out
+          commit-message: Updates

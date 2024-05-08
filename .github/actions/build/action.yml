@@ -1,0 +1,26 @@
+name: 'Install'
+description: 'Installs and builds package'
+inputs:
+  demo:
+    description: 'Should install + build demo'
+    required: true
+    default: false
+  build:
+    description: 'Should build module'
+    required: true
+    default: true
+
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v4
+    - uses: oven-sh/setup-bun@v1
+      with:
+        bun-version: 11.1.7
+    - name: Install
+      run: bun install
+      shell: bash
+    - name: Build
+      if: ${{ inputs.build == 'true' }}
+      run: bun build
+      shell: bash

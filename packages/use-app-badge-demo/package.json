@@ -14,8 +14,8 @@
     "next": "14.2.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "standardized-app-badge": "^0.2.0",
-    "use-app-badge": "^0.2.0"
+    "standardized-app-badge": "*",
+    "use-app-badge": "*"
   },
   "devDependencies": {
     "@tailwindcss/cli": "4.0.0-alpha.14",
