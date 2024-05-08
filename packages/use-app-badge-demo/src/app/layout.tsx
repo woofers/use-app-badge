@@ -9,12 +9,8 @@ const inter = Inter({ subsets: ['latin'] })
 export const metadata = {
   title: 'use-app-badge',
   description: '',
-  manifest: '/manifest.webmanifest',
-
-  metadataBase:
-    process.env.NODE_ENV === 'production'
-      ? new URL('https://jaxs.onl/use-app-badge')
-      : new URL('https://scaling-garbanzo-xqj5rgq545f9qw-3000.app.github.dev/'),
+  manifest: '/use-app-badge/manifest.webmanifest',
+  metadataBase: process.env.NODE_ENV === "production" ? new URL('https://jaxs.onl/use-app-badge') : new URL('http://localhost:3000/use-app-badge'),
   icons: {
     icon: [
       {
@@ -41,7 +37,10 @@ export const metadata = {
 } satisfies Metadata
 
 export const viewport = {
-  themeColor: '#151516'
+  themeColor: '#151516',
+  width: 'device-width',
+  initialScale: 1,
+  viewportFit: 'cover'
 } satisfies Viewport
 
 export default function RootLayout({

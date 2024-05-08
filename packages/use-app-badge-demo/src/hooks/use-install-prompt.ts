@@ -1,6 +1,7 @@
 import { useSyncExternalStore } from 'react'
 
 const initialData = {
+  loaded: false,
   didPromptInstall: false,
   canInstall: false,
   isInstalled: false,
@@ -34,8 +35,11 @@ const setupInstallEvents = (onChange: () => void) => {
     typeof window === 'undefined' ||
     !('BeforeInstallPromptEvent' in window)
   ) {
+    data = { ...data, loaded: true }
     return noop
   }
+
+  // Could match media??
   const isInsalledAlready =
     'matchMedia' in window &&
     window.matchMedia(
@@ -43,7 +47,7 @@ const setupInstallEvents = (onChange: () => void) => {
     ).matches
 
   if (isInsalledAlready) {
-    data = { ...data, isInstalled: true }
+    data = { ...data, loaded: true, isInstalled: true }
     return noop
   }
 
@@ -52,6 +56,7 @@ const setupInstallEvents = (onChange: () => void) => {
     isInstalledTimeout = setTimeout(() => {
       data = {
         ...data,
+        loaded: true,
         isInstalled: true,
         canInstall: false,
         installedButNotOpen: true
@@ -68,11 +73,12 @@ const setupInstallEvents = (onChange: () => void) => {
     if (isBeforeInstallPromptEvent(e) && !data.canInstall) {
       data = {
         ...data,
+        loaded: true,
         isInstalled: false,
         canInstall: true,
         install: () => {
           const promptInstall = async () => {
-            data.didPromptInstall = true
+            data = { ...data, didPromptInstall: true, loaded: true }
             const { outcome } = await e.prompt()
             if (outcome === 'dismissed') data = { ...data, installDenied: true }
             onChange()
@@ -85,7 +91,7 @@ const setupInstallEvents = (onChange: () => void) => {
     e.preventDefault()
   }
   const onInstall = () => {
-    data = { ...data, isInstalled: true }
+    data = { ...data, isInstalled: true, loaded: true }
     onChange()
   }
   window.addEventListener('beforeinstallprompt', onBeforeInstall)

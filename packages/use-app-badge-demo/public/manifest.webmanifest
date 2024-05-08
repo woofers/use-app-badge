@@ -35,11 +35,7 @@
             "src": "icons/icon-512x512.png",
             "sizes": "512x512",
             "type": "image/png"
-        }
-
-        ,
-
-
+        },
         {
             "purpose": "maskable",
             "src": "icons/mask-72x72.png",
@@ -90,14 +86,22 @@
             "type": "image/png",
             "form_factor": "wide",
             "label": "use-app-badge"
+        },
+        {
+            "src": "mobile.png",
+            "sizes": "3840x2560",
+            "type": "image/png",
+            "form_factor": "narrow",
+            "label": "use-app-badge"
         }
     ],
+    "display_override": ["minimal-ui"],
     "orientation": "portrait",
     "display": "standalone",
     "description": "Demo app to show Badge API with use-app-badge",
     "theme_color": "#111110",
     "background_color": "#111110",
-    "start_url": "/",
+    "start_url": "/use-app-badge",
     "short_name": "use-app-badge",
     "name": "use-app-badge"
 }

@@ -1,7 +1,7 @@
 'use client'
 import { useAppBadge } from 'use-app-badge'
 import favicon from '../images/favicon.ico'
-import { useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { cx } from 'class-variance-authority'
 import { useInstallPrompt } from '../hooks/use-install-prompt'
 
@@ -34,6 +34,16 @@ const Button: React.FC<
   />
 )
 
+const emptySubscribe = () => () => {}
+const ClientGate: React.FC<{ children: () => React.ReactNode }> = ({ children }) => {
+  const isServer = React.useSyncExternalStore(
+    emptySubscribe,
+    () => false,
+    () => true
+  )
+  return isServer ? null : children()
+}
+
 export default function Home() {
   const {
     set,
@@ -57,7 +67,8 @@ export default function Home() {
     canInstall,
     isInstalled,
     installDenied,
-    installedButNotOpen
+    installedButNotOpen,
+    loaded
   } = useInstallPrompt()
 
   const supported = isSupported()
@@ -73,6 +84,7 @@ export default function Home() {
     }
   })()
 
+  console.log(loaded, installStatus)
   const atMax = count > 99
   return (
     <main className="flex min-h-screen flex-col items-center">
@@ -125,7 +137,8 @@ export default function Home() {
             <div>supported: {isSupported() ? 'yes' : 'no'}</div>
           </div>
         </div>
-        <div className="w-full flex justify-start pl-[24px]">
+        {loaded && (
+          <div className="w-full flex justify-start pl-[24px]">
           {installStatus === 'initial' && (
             <Button state="initial" onClick={install}>
               install web app to see demo
@@ -151,6 +164,8 @@ export default function Home() {
             </Button>
           )}
         </div>
+        )}
+
       </div>
     </main>
   )
