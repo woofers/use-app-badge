@@ -15,7 +15,7 @@ jobs:
         bun-version: 11.1.7
   build-standardized-app-badge:
     name: Build standardized-app-badge
-    needs: build-standardized-app-badge
+    needs: install
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
@@ -25,7 +25,7 @@ jobs:
         with:
           bun-version: 11.1.7
       - name: Install + Build
-        uses: bun run --cwd packages/standardized-app-badge build 
+        run: bun run --cwd packages/standardized-app-badge build 
   build-use-app-badge:
     name: Build use-app-badge
     needs: install
@@ -38,7 +38,7 @@ jobs:
         with:
           bun-version: 11.1.7
       - name: Install + Build
-        uses: bun run --cwd packages/use-app-badge build
+        run: bun run --cwd packages/use-app-badge build
   build-demo:
     name: Build Demo
     needs: build-use-app-badge
@@ -52,7 +52,7 @@ jobs:
         with:
           bun-version: 11.1.7
       - name: Install + Build
-        uses: bun install --production && bun run --cwd packages/use-app-badge-demo build  
+        run: bun install --production && bun run --cwd packages/use-app-badge-demo build  
       - name: Publish Demo
         uses: JamesIves/github-pages-deploy-action@v4.5.0
         with:
