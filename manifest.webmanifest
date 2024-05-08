@@ -1,0 +1,107 @@
+{
+    "cacheDigest": null,
+    "icons": [
+        {
+            "src": "icons/icon-72x72.png",
+            "sizes": "72x72",
+            "type": "image/png"
+        },
+        {
+            "src": "icons/icon-96x96.png",
+            "sizes": "96x96",
+            "type": "image/png"
+        },
+        {
+            "src": "icons/icon-128x128.png",
+            "sizes": "128x128",
+            "type": "image/png"
+        },
+        {
+            "src": "icons/icon-144x144.png",
+            "sizes": "144x144",
+            "type": "image/png"
+        },
+        {
+            "src": "icons/icon-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "icons/icon-384x384.png",
+            "sizes": "384x384",
+            "type": "image/png"
+        },
+        {
+            "src": "icons/icon-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        },
+        {
+            "purpose": "maskable",
+            "src": "icons/mask-72x72.png",
+            "sizes": "72x72",
+            "type": "image/png"
+        },
+        {
+            "purpose": "maskable",
+            "src": "icons/mask-96x96.png",
+            "sizes": "96x96",
+            "type": "image/png"
+        },
+        {
+            "purpose": "maskable",
+            "src": "icons/mask-128x128.png",
+            "sizes": "128x128",
+            "type": "image/png"
+        },
+        {
+            "purpose": "maskable",
+            "src": "icons/mask-144x144.png",
+            "sizes": "144x144",
+            "type": "image/png"
+        },
+        {
+            "purpose": "maskable",
+            "src": "icons/mask-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "purpose": "maskable",
+            "src": "icons/mask-384x384.png",
+            "sizes": "384x384",
+            "type": "image/png"
+        },
+        {
+            "purpose": "maskable",
+            "src": "icons/mask-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ],
+    "screenshots": [
+        {
+            "src": "desktop.png",
+            "sizes": "5120x2880",
+            "type": "image/png",
+            "form_factor": "wide",
+            "label": "use-app-badge"
+        },
+        {
+            "src": "mobile.png",
+            "sizes": "3840x2560",
+            "type": "image/png",
+            "form_factor": "narrow",
+            "label": "use-app-badge"
+        }
+    ],
+    "display_override": ["minimal-ui"],
+    "orientation": "portrait",
+    "display": "standalone",
+    "description": "Demo app to show Badge API with use-app-badge",
+    "theme_color": "#111110",
+    "background_color": "#111110",
+    "start_url": "/use-app-badge",
+    "short_name": "use-app-badge",
+    "name": "use-app-badge"
+}
