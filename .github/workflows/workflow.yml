@@ -1,7 +1,8 @@
 name: useAppBadge
 
 on: [push]
-
+permissions:
+  contents: write
 jobs:
   build:
     name: Build
