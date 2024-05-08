@@ -28,7 +28,7 @@ jobs:
         run: bun run --cwd packages/standardized-app-badge build 
   build-use-app-badge:
     name: Build use-app-badge
-    needs: install
+    needs: build-standardized-app-badge
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
