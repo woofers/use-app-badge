@@ -3,8 +3,8 @@ name: useAppBadge
 on: [push]
 
 jobs:
-  build-standardized-app-badge:
-    name: Build standardized-app-badge
+  build:
+    name: Build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
@@ -13,33 +13,11 @@ jobs:
         uses: oven-sh/setup-bun@v1
         with:
           bun-version: 1.1.7
-      - name: Install + Build
+      - name: Build standardized-app-badge
         run: bun install && bun run --cwd packages/standardized-app-badge build-ci
-  build-use-app-badge:
-    name: Build use-app-badge
-    needs: build-standardized-app-badge
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repo
-        uses: actions/checkout@v4
-      - name: Install Bun
-        uses: oven-sh/setup-bun@v1
-        with:
-          bun-version: 1.1.7
-      - name: Install + Build
+      - name: Build use-app-badge
         run: bun install && bun run --cwd packages/use-app-badge build-ci
-  build-demo:
-    name: Build Demo
-    needs: build-use-app-badge
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repo
-        uses: actions/checkout@v4
-      - name: Install Bun
-        uses: oven-sh/setup-bun@v1
-        with:
-          bun-version: 1.1.7
-      - name: Install + Build
+      - name: Build Demo
         run: bun install --production && bun run --cwd packages/use-app-badge-demo build  
       - name: Publish Demo
         uses: JamesIves/github-pages-deploy-action@v4.5.0
