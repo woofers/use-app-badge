@@ -84,7 +84,6 @@ export default function Home() {
     }
   })()
 
-  console.log(loaded, installStatus)
   const atMax = count > 99
   return (
     <main className="flex min-h-screen flex-col items-center">

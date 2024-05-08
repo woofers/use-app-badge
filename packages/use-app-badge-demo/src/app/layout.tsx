@@ -8,7 +8,7 @@ const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
   title: 'use-app-badge',
-  description: '',
+  description: 'Demo app to show Badge API with use-app-badge',
   manifest: '/use-app-badge/manifest.webmanifest',
   metadataBase: process.env.NODE_ENV === "production" ? new URL('https://jaxs.onl/use-app-badge') : new URL('http://localhost:3000/use-app-badge'),
   icons: {
