@@ -14,7 +14,7 @@ jobs:
         with:
           bun-version: 1.1.7
       - name: Install + Build
-        run: bun install && bun run --cwd packages/standardized-app-badge build 
+        run: bun install && bun run --cwd packages/standardized-app-badge build-ci
   build-use-app-badge:
     name: Build use-app-badge
     needs: build-standardized-app-badge
@@ -27,7 +27,7 @@ jobs:
         with:
           bun-version: 1.1.7
       - name: Install + Build
-        run: bun install && bun run --cwd packages/use-app-badge build
+        run: bun install && bun run --cwd packages/use-app-badge build-ci
   build-demo:
     name: Build Demo
     needs: build-use-app-badge

@@ -44,6 +44,7 @@
   "homepage": "https://jaxs.onl/use-app-badge/",
   "scripts": {
     "build": "bunchee -m && ./build.sh && ./restore.sh",
+    "build-ci": "bunchee -m && ./build.sh",
     "build-publish": "bunchee -m && ./build.sh && npm publish && ./restore.sh",
     "dev": "bunchee --watch -m",
     "test": "bun typecheck",
