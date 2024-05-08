@@ -32,7 +32,6 @@ jobs:
     name: Build Demo
     needs: build-use-app-badge
     runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags/')
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4

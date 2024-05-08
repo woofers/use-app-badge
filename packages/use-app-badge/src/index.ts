@@ -14,12 +14,6 @@ import {
 } from 'standardized-app-badge'
 import type { FavIcon } from './icon'
 
-declare global {
-  module globalThis {
-    var process: { env: { NODE_ENV: string } }
-  }
-}
-
 const buildGenericError = () => new Error(`Badge API not supported`)
 
 const buildSeverSideRenderError = (func: string) => async (): Promise<void> => {
