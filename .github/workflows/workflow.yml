@@ -18,7 +18,7 @@ jobs:
       - name: Build use-app-badge
         run: bun install && bun run --cwd packages/use-app-badge build-ci
       - name: Build Demo
-        run: bun install --production && bun run --cwd packages/use-app-badge-demo build  
+        run: bun install --production && tree node_modules/use-app-badge/lib && bun run --cwd packages/use-app-badge-demo build  
       - name: Publish Demo
         uses: JamesIves/github-pages-deploy-action@v4.5.0
         with:
