@@ -1,20 +1,47 @@
 'use client'
-import { useAppBadge, AppBadge } from 'use-app-badge'
+import { useAppBadge } from 'use-app-badge'
 import favicon from '../images/favicon.ico'
-import { useCallback, useEffect } from 'react'
+import { useEffect } from 'react'
 import { cx } from 'class-variance-authority'
 import { useInstallPrompt } from '../hooks/use-install-prompt'
 
-const hasNavigator = () => typeof window !== 'undefined' && 'navigator' in window
+const hasNavigator = () =>
+  typeof window !== 'undefined' && 'navigator' in window
 const hasBadgeApi = () => hasNavigator() && 'setAppBadge' in navigator
-const isRecentSafari = () => hasNavigator() && navigator.vendor.startsWith('Apple')
+const isRecentSafari = () =>
+  hasNavigator() && navigator.vendor.startsWith('Apple')
 
-const Button: React.FC<React.ComponentProps<'button'>> = ({ className, type = 'button', ...rest }) => 
-  <button {...rest} className={cx(className = "mt-2 transform-[rotate(-2deg)] text-xs font-semibold cursor-pointer px-3 py-[1px] bg-[#feaf82] rounded-xl text-background", className)} type={type} />
+const colors = {
+  initial: 'bg-[#bde8ff]',
+  denied: 'bg-[#f3999d]',
+  installed: 'bg-[#bdffd4]',
+  unsupported: 'bg-[#feaf82]'
+} as const
+
+const Button: React.FC<
+  React.ComponentProps<'button'> & { state: keyof typeof colors }
+> = ({ className, onClick, type = 'button', state, ...rest }) => (
+  <button
+    {...rest}
+    onClick={onClick}
+    className={cx(
+      className,
+      colors[state],
+      !!onClick ? 'cursor-pointer' : 'cursor-not-allowed',
+      'mt-2 transform-[rotate(-2deg)] text-xs font-semibold px-3 py-[1px] rounded-xl text-background'
+    )}
+    type={type}
+  />
+)
 
 export default function Home() {
-  const { set, clear, countAsNumber: count, isSupported, requestPermission } =
-    useAppBadge({ favIcon: { src: favicon.src } })
+  const {
+    set,
+    clear,
+    countAsNumber: count,
+    isSupported,
+    requestPermission
+  } = useAppBadge({ favIcon: { src: favicon.src } })
   useEffect(() => {
     if (typeof window === 'undefined') {
       return
@@ -25,13 +52,19 @@ export default function Home() {
     }
   }, [set])
 
-  const { install, canInstall, isInstalled, installDenied } = useInstallPrompt()
+  const {
+    install,
+    canInstall,
+    isInstalled,
+    installDenied,
+    installedButNotOpen
+  } = useInstallPrompt()
 
   const supported = isSupported()
   const installStatus = (() => {
     if (installDenied) {
       return 'denied'
-    } else if (isInstalled || supported) {
+    } else if (isInstalled || supported || installedButNotOpen) {
       return 'installed'
     } else if (canInstall) {
       return 'initial'
@@ -40,12 +73,10 @@ export default function Home() {
     }
   })()
 
-  console.log(canInstall)
-
   const atMax = count > 99
   return (
     <main className="flex min-h-screen flex-col items-center">
-      <div className="py-10">
+      <div className="flex flex-col items-center gap-y-2 py-10 w-[240px]">
         <div className="w-[188px]">
           <div className="relative">
             <h1 className="text-2xl font-bold w-[188px] pb-4">use-app-badge</h1>
@@ -94,18 +125,32 @@ export default function Home() {
             <div>supported: {isSupported() ? 'yes' : 'no'}</div>
           </div>
         </div>
-        {installStatus === 'initial' && (
-          <Button onClick={install}>install web app to see demo</Button>
-        )}
-        {installStatus === 'denied' && (
-          <Button disabled>install prompt dismissed</Button>
-        )}
-        {installStatus === 'installed' && (
-          <Button disabled>installed</Button>
-        )}
-        {installStatus === 'unsupported' && (
-          <Button disabled>{isRecentSafari() && hasBadgeApi() ? 'app must be installed from safari' : 'unsupported browser'}</Button>
-        )}
+        <div className="w-full flex justify-start pl-[24px]">
+          {installStatus === 'initial' && (
+            <Button state="initial" onClick={install}>
+              install web app to see demo
+            </Button>
+          )}
+          {installStatus === 'denied' && (
+            <Button state="denied" disabled>
+              install prompt dismissed
+            </Button>
+          )}
+          {installStatus === 'installed' && (
+            <Button state="installed" disabled>
+              {!installedButNotOpen
+                ? 'installed'
+                : 'installed but not open as an app'}
+            </Button>
+          )}
+          {installStatus === 'unsupported' && (
+            <Button state="unsupported" disabled>
+              {isRecentSafari() && hasBadgeApi()
+                ? 'app must be installed from safari'
+                : 'unsupported browser'}
+            </Button>
+          )}
+        </div>
       </div>
     </main>
   )

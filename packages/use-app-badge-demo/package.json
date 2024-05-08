@@ -6,15 +6,16 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "format": "prettier --write \"{tests,src}/**/*.{js,jsx,mjs,ts,tsx}\""
   },
   "dependencies": {
     "class-variance-authority": "^0.7.0",
     "next": "14.2.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "standardized-app-badge": "workspace:*",
-    "use-app-badge": "workspace:*"
+    "standardized-app-badge": "^0.2.0",
+    "use-app-badge": "^0.2.0"
   },
   "devDependencies": {
     "@tailwindcss/cli": "4.0.0-alpha.14",
@@ -24,6 +25,7 @@
     "@types/react-dom": "^18.2.25",
     "eslint": "^9.0.0",
     "eslint-config-next": "14.2.1",
+    "prettier": "^3.2.5",
     "postcss": "^8.4.38",
     "tailwindcss": "4.0.0-alpha.14",
     "typescript": "^5.4.5"

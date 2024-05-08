@@ -38,7 +38,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <script type="text/javascript" dangerouslySetInnerHTML={{ __html: `navigator.serviceWorker.register('sw.js')` }} />
+        <script
+          type="text/javascript"
+          dangerouslySetInnerHTML={{
+            __html: `navigator.serviceWorker.register('sw.js')`
+          }}
+        />
       </head>
       <body className={cx(inter.className, 'bg-background', 'text-secondary')}>
         {children}

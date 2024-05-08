@@ -5,7 +5,8 @@ const initialData = {
   canInstall: false,
   isInstalled: false,
   installDenied: false,
-  install: () => { }
+  installedButNotOpen: false,
+  install: () => {}
 }
 
 let data = initialData
@@ -21,19 +22,53 @@ type BeforeInstallPromptEvent = {
   prompt: () => Promise<BeforeInstallPromptResult>
 }
 
-const isBeforeInstallPromptEvent = (e: Event | BeforeInstallPromptEvent): e is BeforeInstallPromptEvent =>
-  !!e && 'userChoice' in e
+const isBeforeInstallPromptEvent = (
+  e: Event | BeforeInstallPromptEvent
+): e is BeforeInstallPromptEvent => !!e && 'userChoice' in e
 
 const setupInstallEvents = (onChange: () => void) => {
-  if (typeof window === 'undefined' || !('BeforeInstallPromptEvent' in window)) {
-    return () => {
-      // pass
-    }
+  const noop = () => {
+    // pass
   }
+  if (
+    typeof window === 'undefined' ||
+    !('BeforeInstallPromptEvent' in window)
+  ) {
+    return noop
+  }
+  const isInsalledAlready =
+    'matchMedia' in window &&
+    window.matchMedia(
+      '(display-mode: standalone), (display-mode: minimal-ui), (display-mode: window-controls-overlay)'
+    ).matches
+
+  if (isInsalledAlready) {
+    data = { ...data, isInstalled: true }
+    return noop
+  }
+
+  let isInstalledTimeout: ReturnType<typeof setTimeout> | null = null
+  if ('onappinstalled' in window) {
+    isInstalledTimeout = setTimeout(() => {
+      data = {
+        ...data,
+        isInstalled: true,
+        canInstall: false,
+        installedButNotOpen: true
+      }
+      onChange()
+    }, 350)
+  }
+
   const onBeforeInstall = (e: Event) => {
+    if (typeof isInstalledTimeout === 'number') {
+      clearTimeout(isInstalledTimeout)
+      isInstalledTimeout = null
+    }
     if (isBeforeInstallPromptEvent(e) && !data.canInstall) {
       data = {
-        ...data, 
+        ...data,
+        isInstalled: false,
         canInstall: true,
         install: () => {
           const promptInstall = async () => {
@@ -43,7 +78,6 @@ const setupInstallEvents = (onChange: () => void) => {
             onChange()
           }
           if (!data.didPromptInstall) void promptInstall()
-
         }
       }
       onChange()
@@ -65,6 +99,5 @@ const setupInstallEvents = (onChange: () => void) => {
 
 const getInstallStatus = () => data
 
-export const useInstallPrompt = () => {
-  return useSyncExternalStore(setupInstallEvents, getInstallStatus, getInstallStatus)
-}
+export const useInstallPrompt = () =>
+  useSyncExternalStore(setupInstallEvents, getInstallStatus, getInstallStatus)
