@@ -1,4 +1,7 @@
-cat > lib/cjs/index.js <<- "EOF"
+RUNDIR=$(basename $(dirname $(dirname $PWD)))
+[[ $RUNDIR == "use-app-badge" ]] && ADDDIR="packages/use-app-badge" || ADDDIR=""
+
+cat > "$ADDDIR/lib/cjs/index.js" <<- "EOF"
 if (process.env.NODE_ENV !== 'development') {
   module.exports = require('./index.production.js')
 } else {
@@ -6,7 +9,7 @@ if (process.env.NODE_ENV !== 'development') {
 }
 EOF
 
-cat > lib/es/index.mjs <<- "EOF"
+cat > "$ADDDIR/lib/es/index.mjs" <<- "EOF"
 import { useAppBadge as uab, AppBadge as ab } from './index.production.mjs'
 import { useAppBadge as uabDev, AppBadge as abDev } from './index.development.mjs'
 
