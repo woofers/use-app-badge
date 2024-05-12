@@ -119,14 +119,14 @@ export default function Home() {
                 install prompt dismissed
               </Button>
             )}
-            {installStatus === 'install' ||
-              (installStatus === 'install-not-open' && (
+            {(installStatus === 'install' ||
+              installStatus === 'install-not-open') && (
                 <Button state="installed" disabled>
                   {status !== 'install-not-open'
                     ? 'installed'
                     : 'installed but not open as an app'}
                 </Button>
-              ))}
+              )}
             {installStatus === 'unsupported' && (
               <Button state="unsupported" disabled>
                 {isRecentSafari() && hasBadgeApi()
