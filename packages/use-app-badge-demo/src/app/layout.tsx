@@ -1,7 +1,6 @@
 import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
-import favicon from '../images/favicon.ico'
 import { cx } from 'class-variance-authority'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -15,20 +14,6 @@ export const metadata = {
       ? new URL('https://jaxs.onl/use-app-badge')
       : new URL('http://localhost:3000/use-app-badge'),
   icons: {
-    icon: [
-      {
-        rel: 'icon',
-        url: favicon.src,
-        sizes: '48x48',
-        media: '(pointer: coarse), (pointer: fine)'
-      },
-      {
-        rel: 'icon',
-        url: favicon.src,
-        sizes: '48x48'
-      }
-    ],
-
     apple: [
       ...[72, 96, 128, 144, 152, 192, 384, 512].map(size => ({
         url: `/icons/mask-${size}x${size}.png`,
