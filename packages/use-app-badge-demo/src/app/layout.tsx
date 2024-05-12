@@ -61,7 +61,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className={cx(inter.className, 'bg-background', 'text-secondary')}>
+      <body className={cx(inter.className, 'bg-black', 'text-secondary')}>
         {children}
       </body>
     </html>

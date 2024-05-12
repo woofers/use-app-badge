@@ -115,6 +115,7 @@ export const useInstallPrompt = () => {
     getInstallStatus,
     getInstallStatus
   )
+  console.log(loaded, status)
   return useMemo(
     () => ({ install, status: loaded ? status : ('loading' as const) }),
     [install, loaded, status]

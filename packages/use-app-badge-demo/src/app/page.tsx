@@ -5,6 +5,15 @@ import React, { useEffect } from 'react'
 import { cx } from 'class-variance-authority'
 import { useInstallPrompt } from '../hooks/use-install-prompt'
 
+/*
+width: calc(100% - 8px);
+background: var(--color-background, #111110);
+border-top-left-radius: 12px;
+border-top-right-radius: 12px;
+border: 1px solid #434343;
+margin-top: 4px;
+*/
+
 const hasNavigator = () =>
   typeof window !== 'undefined' && 'navigator' in window
 const hasBadgeApi = () => hasNavigator() && 'setAppBadge' in navigator
@@ -28,7 +37,7 @@ const Button: React.FC<
       className,
       colors[state],
       !!onClick ? 'cursor-pointer' : 'cursor-not-allowed',
-      'mt-2 transform-[rotate(-2deg)] text-xs font-semibold px-3 py-[1px] rounded-xl text-background'
+      'mt-2 transform-[rotate(-2deg)] text-xs font-semibold px-3 py-[1px] rounded-xl text-background lowercase'
     )}
     type={type}
   />
@@ -57,7 +66,8 @@ export default function Home() {
   const installStatus = !supported ? status : 'install'
   const atMax = count > 99
   return (
-    <main className="flex min-h-screen flex-col items-center">
+    <main className="flex min-h-screen flex-col items-center grow">
+      <div className={cx('w-[calc(100%-8px)] bg-background rounded-t-xl mt-1 flex flex-col items-center grow', '[border-top:1px_solid_#434343]', '[border-left:1px_solid_#434343]', '[border-right:1px_solid_#434343]')}>
       <div className="flex flex-col items-center gap-y-2 py-10 w-[240px]">
         <div className="w-[188px]">
           <div className="relative">
@@ -85,57 +95,58 @@ export default function Home() {
           </div>
           <div className="flex flex-col gap-y-2 w-[188px] items-start">
             <button
-              className="text-accent cursor-pointer"
+              className="text-accent cursor-pointer lowercase"
               onClick={() => void requestPermission()}
             >
-              request permission
+              Request Permission
             </button>
             <button
-              className="text-accent cursor-pointer"
+              className="text-accent cursor-pointer lowercase"
               onClick={() => void set(count + 1)}
             >
-              increment badge count
+              Increment Badge Count
             </button>
             <button
-              className="text-accent cursor-pointer"
+              className="text-accent cursor-pointer lowercase"
               onClick={() => void clear()}
             >
-              clear badge
+              Clear Badge
             </button>
           </div>
-          <div className="flex flex-col gap-y-2 w-[188px] items-start pt-4">
-            <div>supported: {isSupported() ? 'yes' : 'no'}</div>
+          <div className="flex flex-col gap-y-2 w-[188px] items-start pt-4 lowercase">
+            <div>Supported: {isSupported() ? 'yes' : 'no'}</div>
           </div>
         </div>
         {installStatus !== 'loading' && (
           <div className="w-full flex justify-start pl-[24px]">
             {installStatus === 'initial' && (
               <Button state="initial" onClick={install}>
-                install web app to see demo
+                Install Web App to see Demo
               </Button>
             )}
             {installStatus === 'denied' && (
               <Button state="denied" disabled>
-                install prompt dismissed
+                Install Prompt Dismissed
               </Button>
             )}
             {(installStatus === 'install' ||
               installStatus === 'install-not-open') && (
                 <Button state="installed" disabled>
                   {status !== 'install-not-open'
-                    ? 'installed'
-                    : 'installed but not open as an app'}
+                    ? 'Installed'
+                    : 'Installed but Not Open as an App'}
                 </Button>
               )}
             {installStatus === 'unsupported' && (
               <Button state="unsupported" disabled>
                 {isRecentSafari() && hasBadgeApi()
-                  ? 'app must be installed from safari'
-                  : 'unsupported browser'}
+                  ? 'App must be Installed from Safari'
+                  : 'Unsupported Browser'}
               </Button>
             )}
           </div>
         )}
+      </div>
       </div>
     </main>
   )
