@@ -95,7 +95,7 @@
             "label": "use-app-badge"
         }
     ],
-    "scope": "/use-app-badge/",
+    "scope": "https://jaxs.onl/use-app-badge/",
     "display_override": ["minimal-ui"],
     "orientation": "portrait",
     "display": "standalone",
