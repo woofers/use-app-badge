@@ -1,13 +1,11 @@
-import { useSyncExternalStore } from 'react'
+import { useMemo, useSyncExternalStore } from 'react'
 
 const initialData = {
   loaded: false,
   didPromptInstall: false,
   canInstall: false,
-  isInstalled: false,
-  installDenied: false,
-  installedButNotOpen: false,
-  install: () => {}
+  install: () => {},
+  status: 'unsupported' as InstallStatus
 }
 
 let data = initialData
@@ -22,6 +20,13 @@ type BeforeInstallPromptEvent = {
   userChoice: Promise<BeforeInstallPromptResult>
   prompt: () => Promise<BeforeInstallPromptResult>
 }
+
+type InstallStatus =
+  | 'denied'
+  | 'initial'
+  | 'install-not-open'
+  | 'install'
+  | 'unsupported'
 
 const isBeforeInstallPromptEvent = (
   e: Event | BeforeInstallPromptEvent
@@ -47,7 +52,7 @@ const setupInstallEvents = (onChange: () => void) => {
     ).matches
 
   if (isInsalledAlready) {
-    data = { ...data, loaded: true, isInstalled: true }
+    data = { ...data, loaded: true, status: 'install' }
     return noop
   }
 
@@ -56,10 +61,9 @@ const setupInstallEvents = (onChange: () => void) => {
     isInstalledTimeout = setTimeout(() => {
       data = {
         ...data,
+        status: 'install-not-open',
         loaded: true,
-        isInstalled: true,
-        canInstall: false,
-        installedButNotOpen: true
+        canInstall: false
       }
       onChange()
     }, 350)
@@ -74,13 +78,13 @@ const setupInstallEvents = (onChange: () => void) => {
       data = {
         ...data,
         loaded: true,
-        isInstalled: false,
         canInstall: true,
+        status: 'initial',
         install: () => {
           const promptInstall = async () => {
             data = { ...data, didPromptInstall: true, loaded: true }
             const { outcome } = await e.prompt()
-            if (outcome === 'dismissed') data = { ...data, installDenied: true }
+            if (outcome === 'dismissed') data = { ...data, status: 'denied' }
             onChange()
           }
           if (!data.didPromptInstall) void promptInstall()
@@ -91,7 +95,7 @@ const setupInstallEvents = (onChange: () => void) => {
     e.preventDefault()
   }
   const onInstall = () => {
-    data = { ...data, isInstalled: true, loaded: true }
+    data = { ...data, loaded: true, status: 'install' }
     onChange()
   }
   window.addEventListener('beforeinstallprompt', onBeforeInstall)
@@ -105,5 +109,14 @@ const setupInstallEvents = (onChange: () => void) => {
 
 const getInstallStatus = () => data
 
-export const useInstallPrompt = () =>
-  useSyncExternalStore(setupInstallEvents, getInstallStatus, getInstallStatus)
+export const useInstallPrompt = () => {
+  const { install, loaded, status } = useSyncExternalStore(
+    setupInstallEvents,
+    getInstallStatus,
+    getInstallStatus
+  )
+  return useMemo(
+    () => ({ install, status: loaded ? status : ('loading' as const) }),
+    [install, loaded, status]
+  )
+}

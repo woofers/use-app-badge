@@ -34,16 +34,6 @@ const Button: React.FC<
   />
 )
 
-const emptySubscribe = () => () => {}
-const ClientGate: React.FC<{ children: () => React.ReactNode }> = ({ children }) => {
-  const isServer = React.useSyncExternalStore(
-    emptySubscribe,
-    () => false,
-    () => true
-  )
-  return isServer ? null : children()
-}
-
 export default function Home() {
   const {
     set,
@@ -62,28 +52,9 @@ export default function Home() {
     }
   }, [set])
 
-  const {
-    install,
-    canInstall,
-    isInstalled,
-    installDenied,
-    installedButNotOpen,
-    loaded
-  } = useInstallPrompt()
-
+  const { install, status } = useInstallPrompt()
   const supported = isSupported()
-  const installStatus = (() => {
-    if (installDenied) {
-      return 'denied'
-    } else if (isInstalled || supported || installedButNotOpen) {
-      return 'installed'
-    } else if (canInstall) {
-      return 'initial'
-    } else {
-      return 'unsupported'
-    }
-  })()
-
+  const installStatus = !supported ? status : 'install'
   const atMax = count > 99
   return (
     <main className="flex min-h-screen flex-col items-center">
@@ -136,35 +107,35 @@ export default function Home() {
             <div>supported: {isSupported() ? 'yes' : 'no'}</div>
           </div>
         </div>
-        {loaded && (
+        {installStatus !== 'loading' && (
           <div className="w-full flex justify-start pl-[24px]">
-          {installStatus === 'initial' && (
-            <Button state="initial" onClick={install}>
-              install web app to see demo
-            </Button>
-          )}
-          {installStatus === 'denied' && (
-            <Button state="denied" disabled>
-              install prompt dismissed
-            </Button>
-          )}
-          {installStatus === 'installed' && (
-            <Button state="installed" disabled>
-              {!installedButNotOpen
-                ? 'installed'
-                : 'installed but not open as an app'}
-            </Button>
-          )}
-          {installStatus === 'unsupported' && (
-            <Button state="unsupported" disabled>
-              {isRecentSafari() && hasBadgeApi()
-                ? 'app must be installed from safari'
-                : 'unsupported browser'}
-            </Button>
-          )}
-        </div>
+            {installStatus === 'initial' && (
+              <Button state="initial" onClick={install}>
+                install web app to see demo
+              </Button>
+            )}
+            {installStatus === 'denied' && (
+              <Button state="denied" disabled>
+                install prompt dismissed
+              </Button>
+            )}
+            {installStatus === 'install' ||
+              (installStatus === 'install-not-open' && (
+                <Button state="installed" disabled>
+                  {status !== 'install-not-open'
+                    ? 'installed'
+                    : 'installed but not open as an app'}
+                </Button>
+              ))}
+            {installStatus === 'unsupported' && (
+              <Button state="unsupported" disabled>
+                {isRecentSafari() && hasBadgeApi()
+                  ? 'app must be installed from safari'
+                  : 'unsupported browser'}
+              </Button>
+            )}
+          </div>
         )}
-
       </div>
     </main>
   )

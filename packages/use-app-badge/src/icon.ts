@@ -1,4 +1,3 @@
-
 type BadgeOptions = {
   content: number | string | boolean
   badgeColor: string
@@ -36,7 +35,7 @@ const createCanvas = () => {
   return canvas
 }
 
-const makePool = <T,>(create: () => T) => {
+const makePool = <T>(create: () => T) => {
   let pool = [] as T[]
   let available = [] as number[]
   const get = () => {
@@ -44,7 +43,9 @@ const makePool = <T,>(create: () => T) => {
       const lastAvailable = available.pop()
       return [
         pool[lastAvailable],
-        () => { available.push(lastAvailable) },
+        () => {
+          available.push(lastAvailable)
+        }
       ] as const
     }
     const element = create()
@@ -52,7 +53,9 @@ const makePool = <T,>(create: () => T) => {
     const at = pool.length - 1
     return [
       element,
-      () => { available.push(at) }
+      () => {
+        available.push(at)
+      }
     ] as const
   }
   return get
