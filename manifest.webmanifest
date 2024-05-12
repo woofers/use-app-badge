@@ -95,6 +95,7 @@
             "label": "use-app-badge"
         }
     ],
+    "scope": "/use-app-badge/",
     "display_override": ["minimal-ui"],
     "orientation": "portrait",
     "display": "standalone",
