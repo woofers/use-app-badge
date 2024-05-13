@@ -109,7 +109,7 @@ export const AppBadge: React.FC<{}> = () => {
           </ClientGate>
         </div>
       </div>
-      {installStatus !== 'loading' && (
+      {installStatus !== 'loading' ? (
         <div className="w-full flex justify-start pl-[24px]">
           {installStatus === 'initial' && (
             <Button state="initial" onClick={install}>
@@ -137,6 +137,8 @@ export const AppBadge: React.FC<{}> = () => {
             </Button>
           )}
         </div>
+      ) : (
+        <div className="w-full flex justify-start pl-[24px] h-[26px]" />
       )}
     </div>
   )

@@ -89,7 +89,7 @@ const createComponents = (meta: Meta) => {
     Image,
     img: Img,
     ul: ({ className, ...rest }: React.HTMLProps<HTMLUListElement>) => (
-      <ul className={cx('[list-style:square]', className)} {...rest} />
+      <ul className={cx('', className)} {...rest} />
     ),
     pre: (props: React.HTMLProps<HTMLPreElement>) => (
       <pre
@@ -99,7 +99,7 @@ const createComponents = (meta: Meta) => {
     ),
     a: Anchor,
     strong: ({ className, ...rest }: React.HTMLProps<HTMLSpanElement>) => (
-      <strong {...rest} className={cx('', className)} />
+      <strong {...rest} className={cx('font-semibold', className)} />
     ),
     h1: (props: TextProps) => null,
     h2: ({ className, ...rest }: TextProps) => (
