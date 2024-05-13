@@ -1,5 +1,6 @@
 'use client'
 import { useAppBadge } from 'use-app-badge'
+import favicon from '../../public/icons/favicon.ico'
 import React, { useEffect } from 'react'
 import { cx } from 'class-variance-authority'
 import { useInstallPrompt } from '@/hooks/use-install-prompt'
@@ -41,7 +42,7 @@ export const AppBadge: React.FC<{}> = () => {
     countAsNumber: count,
     isSupported,
     requestPermission
-  } = useAppBadge({ favIcon: { src: '/icons/favicon.ico' } })
+  } = useAppBadge({ favIcon: { src: favicon.src } })
   useEffect(() => {
     if (typeof window === 'undefined') {
       return
