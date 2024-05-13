@@ -17,13 +17,13 @@ export const metadata = {
     icon: [
       {
         rel: 'icon',
-        url: '/icons/favicon.ico',
+        url: '/use-app-badge/icons/favicon.ico',
         sizes: '48x48'
       }
     ],
     apple: [
       ...[72, 96, 128, 144, 152, 192, 384, 512].map(size => ({
-        url: `/icons/mask-${size}x${size}.png`,
+        url: `/use-app-badge/icons/mask-${size}x${size}.png`,
         sizes: `${size}x${size}`,
         type: 'image/png'
       }))
