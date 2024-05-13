@@ -14,6 +14,13 @@ export const metadata = {
       ? new URL('https://jaxs.onl/use-app-badge')
       : new URL('http://localhost:3000/use-app-badge'),
   icons: {
+    icon: [
+      {
+        rel: 'icon',
+        url: '/favicon.ico',
+        sizes: '48x48'
+      }
+    ],
     apple: [
       ...[72, 96, 128, 144, 152, 192, 384, 512].map(size => ({
         url: `/icons/mask-${size}x${size}.png`,
