@@ -3,7 +3,7 @@ import { useAppBadge } from 'use-app-badge'
 import favicon from '../../public/icons/favicon.ico'
 import React, { useEffect } from 'react'
 import { cx } from 'class-variance-authority'
-import { useInstallPrompt } from '@/hooks/use-install-prompt'
+import { useInstallPrompt } from 'hooks/use-install-prompt'
 import { ClientGate } from './client-gate'
 
 const hasNavigator = () =>
@@ -104,7 +104,9 @@ export const AppBadge: React.FC<{}> = () => {
           </button>
         </div>
         <div className="flex flex-col gap-y-2 w-[188px] items-start pt-4 lowercase">
-          <ClientGate>{() => <>Supported {isSupported() ? 'Yes' : 'No'}</>}</ClientGate>
+          <ClientGate>
+            {() => <>Supported {isSupported() ? 'Yes' : 'No'}</>}
+          </ClientGate>
         </div>
       </div>
       {installStatus !== 'loading' && (

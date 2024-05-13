@@ -1,7 +1,9 @@
-import { useSyncExternalStore } from "react"
+import { useSyncExternalStore } from 'react'
 
 const emptySubscribe = () => () => {}
-export const ClientGate: React.FC<{ children: () => React.ReactNode }> = ({ children }) => {
+export const ClientGate: React.FC<{ children: () => React.ReactNode }> = ({
+  children
+}) => {
   const isServer = useSyncExternalStore(
     emptySubscribe,
     () => false,
