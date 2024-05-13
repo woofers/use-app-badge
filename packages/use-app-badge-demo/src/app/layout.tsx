@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
+import favicon from '../../public/icons/favicon.ico'
 import './globals.css'
 import { cx } from 'class-variance-authority'
 
@@ -17,7 +18,7 @@ export const metadata = {
     icon: [
       {
         rel: 'icon',
-        url: '/use-app-badge/icons/favicon.ico',
+        url: favicon.src,
         sizes: '48x48'
       }
     ],
