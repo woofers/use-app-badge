@@ -20,6 +20,7 @@ const Page: React.FC<{}> = () => (
         <div className="py-4">
           <Mdx meta={{ project: 'use-app-badge' }} code={docs.body.code} />
         </div>
+        <div className="w-full h-5" aria-hidden />
       </div>
     </div>
   </main>
