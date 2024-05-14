@@ -35,12 +35,12 @@ yarn add use-app-badge
 npm install use-app-badge
 ```
 
-## API
+## Usage
 
 ```tsx
-import { AppBadge, useAppBadgae } from 'use-app-badge'
+import { AppBadge, useAppBadge } from 'use-app-badge'
 
-const App: React.FC<{}> = () => {
+const App = () => {
   const {
     set,
     clear,
@@ -101,7 +101,7 @@ const App: React.FC<{}> = () => {
 }
 ```
 
-## API
+## Reference
 
 ### useAppBadge()
 
