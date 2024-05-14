@@ -4,6 +4,7 @@ import { useMDXComponent } from 'next-contentlayer/hooks'
 import { cx } from 'class-variance-authority'
 import Link from './link'
 import Typography from './text'
+import windows from '../../../../screenshots/windows.png'
 
 type InsetProps = { inset?: 'both' | 'left' | 'right' | 'none' }
 
@@ -89,12 +90,12 @@ const createComponents = (meta: Meta) => {
     Image,
     img: Img,
     ul: ({ className, ...rest }: React.HTMLProps<HTMLUListElement>) => (
-      <ul className={cx('', className)} {...rest} />
+      <ul className={cx(className !== 'feature-list' && 'list-style-[circle] ps-8', className)} {...rest} />
     ),
     pre: (props: React.HTMLProps<HTMLPreElement>) => (
       <pre
         {...props}
-        className="rounded-xl mb-2.5 mt-2 [line-height:1.42] bg-[#030202]! text-[#aaaaca] [overflow:auto] [overflow-wrap:normal] p-6 text-xs grayscale-[20%] sm:text-sm"
+        className="rounded-xl mb-4 mt-5 [line-height:1.42] bg-[#030202]! text-[#aaaaca] [overflow:auto] [overflow-wrap:normal] p-6 text-xs grayscale-[20%] sm:text-sm"
       />
     ),
     a: Anchor,
@@ -107,7 +108,7 @@ const createComponents = (meta: Meta) => {
         type="h4"
         font="serif"
         fontWeight="medium"
-        className={cx('mt-2 mb-1', className)}
+        className={cx('mt-4 mb-3', className)}
         {...rest}
         as="h2"
       />
@@ -153,6 +154,9 @@ type MdxProps = {
   code: string
   meta?: Meta
 }
+
+const Taskbar = () => 
+  <Image className="rounded-lg mt-2 mb-4 mx-auto" src={windows} alt="Badge API on Windows Taskbar" />
 
 export const Mdx: React.FC<MdxProps> = ({ code, meta = { project: '' } }) => {
   const Component = useMDXComponent(code)

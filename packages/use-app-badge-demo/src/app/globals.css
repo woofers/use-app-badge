@@ -7,4 +7,14 @@
   --color-background: #111110;
   --color-secondary: #dbdbdb;
   --color-black: #000000;
+  --color-white: #ffffff;
+}
+
+@layer utilities {
+  .feature-list {
+    list-style-type: none;
+  }
+  .feature-list > li:before {
+    content: "- ";
+  }
 }

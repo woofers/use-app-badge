@@ -110,7 +110,7 @@ export const AppBadge: React.FC<{}> = () => {
         </div>
       </div>
       {installStatus !== 'loading' ? (
-        <div className="w-full flex justify-start pl-[24px]">
+        <div className="w-full flex justify-start pl-[24px] h-[26px]">
           {installStatus === 'initial' && (
             <Button state="initial" onClick={install}>
               Install Web App to see Demo
