@@ -4,7 +4,6 @@ import { useMDXComponent } from 'next-contentlayer/hooks'
 import { cx } from 'class-variance-authority'
 import Link from './link'
 import Typography from './text'
-import windows from '../../public/windows.webp'
 
 type InsetProps = { inset?: 'both' | 'left' | 'right' | 'none' }
 
@@ -154,9 +153,6 @@ type MdxProps = {
   code: string
   meta?: Meta
 }
-
-const Taskbar = () => 
-  <Image className="rounded-lg mt-2 mb-4 mx-auto" src={windows} alt="Badge API on Windows Taskbar" />
 
 export const Mdx: React.FC<MdxProps> = ({ code, meta = { project: '' } }) => {
   const Component = useMDXComponent(code)

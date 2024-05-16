@@ -22,8 +22,8 @@ const text = cva([], {
     },
     font: {
       sansSerif: [],
-      serif: ['[font-family:var(--font-serif)]'],
-      heading: ['[font-family:var(--font-sans-serif)]']
+      serif: [],
+      heading: []
     },
     type: {
       h1: ['text-5xl'],
