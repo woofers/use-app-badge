@@ -9,9 +9,9 @@ const Page: React.FC<{}> = () => (
   <main className="flex min-h-screen flex-col items-center grow">
     <div
       className={cx(
-        'w-[calc(100%-8px)] bg-background rounded-t-xl mt-1 flex flex-col items-center grow',
-        'border-[#434343] border-t border-l border-r',
-        'sm:border-transparent sm:border-0 sm:w-full sm:rounded-none sm:mt-0'
+        'bg-background flex flex-col items-center grow',
+        'sm:w-[calc(100%-8px)] sm:rounded-t-xl sm:mt-1 sm:border-[#434343] sm:border-t sm:border-l sm:border-r',
+        'border-transparent border-0 w-full rounded-none mt-0'
       )}
     >
       <AppBadge />
