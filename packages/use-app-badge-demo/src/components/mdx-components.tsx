@@ -4,7 +4,7 @@ import { useMDXComponent } from 'next-contentlayer/hooks'
 import { cx } from 'class-variance-authority'
 import Link from './link'
 import Typography from './text'
-import windows from '../../../../screenshots/windows.png'
+import windows from '../../public/windows.webp'
 
 type InsetProps = { inset?: 'both' | 'left' | 'right' | 'none' }
 
