@@ -10,9 +10,8 @@ const Page: React.FC<{}> = () => (
     <div
       className={cx(
         'w-[calc(100%-8px)] bg-background rounded-t-xl mt-1 flex flex-col items-center grow',
-        '[border-top:1px_solid_#434343]',
-        '[border-left:1px_solid_#434343]',
-        '[border-right:1px_solid_#434343]'
+        'border-[#434343] border-t border-l border-r',
+        'sm:border-transparent sm:border-0 sm:w-full sm:rounded-none sm:mt-0'
       )}
     >
       <AppBadge />

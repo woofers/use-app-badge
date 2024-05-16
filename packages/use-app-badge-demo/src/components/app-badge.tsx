@@ -103,7 +103,7 @@ export const AppBadge: React.FC<{}> = () => {
             Clear Badge
           </button>
         </div>
-        <div className="flex flex-col gap-y-2 w-[188px] items-start pt-4 lowercase">
+        <div className="flex flex-col gap-y-2 w-[188px] items-start pt-4 lowercase h-[40px]">
           <ClientGate>
             {() => <>Supported {isSupported() ? 'Yes' : 'No'}</>}
           </ClientGate>
@@ -138,7 +138,7 @@ export const AppBadge: React.FC<{}> = () => {
           )}
         </div>
       ) : (
-        <div className="w-full flex justify-start pl-[24px] h-[26px]" />
+        <div className="w-full flex justify-start pl-[24px] h-[28px]" />
       )}
     </div>
   )
