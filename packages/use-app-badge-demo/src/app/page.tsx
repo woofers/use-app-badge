@@ -10,7 +10,7 @@ const Page: React.FC<{}> = () => (
     <div
       className={cx(
         'bg-background flex flex-col items-center grow',
-        'sm:w-[calc(100%-8px)] sm:rounded-t-xl sm:mt-1 sm:border-[#434343] sm:border-t sm:border-l sm:border-r',
+        'sm:w-[calc(100%-8px)] sm:rounded-t-xl sm:mt-1 sm:border-[#434343] sm:border-t sm:border-l sm:border-r sm:border-solid',
         'border-transparent border-0 w-full rounded-none mt-0'
       )}
     >
