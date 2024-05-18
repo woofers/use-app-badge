@@ -1,7 +1,7 @@
 'use client'
 import { useAppBadge } from 'use-app-badge'
 import favicon from '../../public/icons/favicon.ico'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { cx } from 'class-variance-authority'
 import { useInstallPrompt } from 'hooks/use-install-prompt'
 import { ClientGate } from './client-gate'
@@ -43,6 +43,7 @@ export const AppBadge: React.FC<{}> = () => {
     isSupported,
     requestPermission
   } = useAppBadge({ favIcon: { src: favicon.src } })
+  const [maxCount, setMaxCount] = useState(() => count)
   useEffect(() => {
     if (typeof window === 'undefined') {
       return
@@ -78,7 +79,7 @@ export const AppBadge: React.FC<{}> = () => {
                   'font-bold absolute top-0 left-0 w-[40px] h-[40px] flex items-center justify-center'
                 )}
               >
-                {atMax ? '99+' : Math.max(count, 1)}
+                {atMax ? '99+' : Math.max(count, maxCount)}
               </div>
             </div>
           </div>
@@ -92,7 +93,13 @@ export const AppBadge: React.FC<{}> = () => {
           </button>
           <button
             className="text-accent cursor-pointer lowercase"
-            onClick={() => void set(count + 1)}
+            onClick={() => {
+              const doSet = async () => {
+                await set(count + 1)
+                setMaxCount(count + 1)
+              }
+              void doSet()
+            }}
           >
             Increment Badge Count
           </button>
