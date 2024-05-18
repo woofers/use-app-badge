@@ -2,7 +2,7 @@ import { withContentlayer } from 'next-contentlayer'
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    reactStrictMode: false,
+    reactStrictMode: true,
     output: 'export',
     basePath: '/use-app-badge',
     assetPrefix: '/use-app-badge/',
