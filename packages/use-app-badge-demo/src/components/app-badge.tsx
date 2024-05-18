@@ -78,7 +78,7 @@ export const AppBadge: React.FC<{}> = () => {
                   'font-bold absolute top-0 left-0 w-[40px] h-[40px] flex items-center justify-center'
                 )}
               >
-                {atMax ? '99+' : count}
+                {atMax ? '99+' : Math.max(count, 1)}
               </div>
             </div>
           </div>
