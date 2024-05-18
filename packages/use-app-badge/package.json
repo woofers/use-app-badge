@@ -73,8 +73,8 @@
     "happy-dom": "^12.1.6",
     "microbundle": "^0.15.1",
     "prettier": "^3.0.3",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "react": "19.0.0-rc-3f1436cca1-20240516",
+    "react-dom": "19.0.0-rc-3f1436cca1-20240516",
     "rimraf": "^5.0.1",
     "typescript": "^5.2.2"
   },
