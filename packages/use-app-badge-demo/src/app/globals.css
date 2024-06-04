@@ -1,6 +1,7 @@
 @import "tailwindcss";
 
 @theme {
+  /*
   --color-*: initial;
 
   --color-accent: #ffd4bd;
@@ -8,7 +9,22 @@
   --color-secondary: #dbdbdb;
   --color-black: #000000;
   --color-white: #ffffff;
+  --color-code: #030202;
+  --color-textcode: #aaaaca;
+  */
+  
+  --color-*: initial;
+
+  --color-accent: #ffd4bd;
+  --color-background: #eeeeef;
+  --color-secondary: #111110;
+  --color-black: #000000;
+  --color-white: #ffffff;
+  --color-code: #eae7ee;
+  --color-textcode: #5b373a;
 }
+
+
 
 @layer utilities {
   .feature-list {
