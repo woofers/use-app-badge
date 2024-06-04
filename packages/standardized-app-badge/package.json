@@ -3,14 +3,21 @@
   "version": "0.2.0",
   "description": "Cross-browser wrapper for Navigator Badge API",
   "sideEffects": false,
-  "main": "./lib/cjs/index.js",
-  "module": "./lib/es/index.mjs",
+  "main": "./lib/cjs/index.production.js",
+  "module": "./lib/es/index.production.mjs",
   "types": "./lib/index.d.ts",
   "exports": {
     ".": {
-      "types": "./lib/index.d.ts",
-      "import": "./lib/es/index.mjs",
-      "default": "./lib/cjs/index.js"
+      "development": {
+        "types": "./lib/index.d.ts",
+        "import": "./lib/es/index.development.mjs",
+        "default": "./lib/cjs/index.development.js"
+      },
+      "production": {
+        "types": "./lib/index.d.ts",
+        "import": "./lib/es/index.production.mjs",
+        "default": "./lib/cjs/index.production.js"
+      }
     }
   },
   "files": [
@@ -36,7 +43,7 @@
   },
   "homepage": "https://jaxs.onl/use-app-badge/",
   "scripts": {
-    "build": "bunchee -m && ./build.sh && ./restore.sh",
+    "build": "./restore.sh && bunchee -m && ./build.sh",
     "build-ci": "bunchee -m && ./build.sh",
     "build-publish": "bunchee -m && ./build.sh && npm publish && ./restore.sh",
     "dev": "bunchee --watch -m",
@@ -46,7 +53,6 @@
     "clean": "rimraf lib"
   },
   "devDependencies": {
-    "@types/bun": "^1.0.12",
     "bunchee": "^5.1.2",
     "prettier": "^3.0.3",
     "rimraf": "^5.0.1",

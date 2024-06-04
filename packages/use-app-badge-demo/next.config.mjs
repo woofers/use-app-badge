@@ -7,7 +7,7 @@ const nextConfig = {
     basePath: '/use-app-badge',
     assetPrefix: '/use-app-badge/',
     experimental: {
-      reactCompiler: true
+      reactCompiler: false
     }
 }
 

@@ -1,9 +1,10 @@
 
-const package = require('./package.json')
+const pkg = require('./package.json')
 const fs = require('fs')
 
-const obj = process.argv[2]
-package.exports = JSON.parse(obj)
-fs.writeFile('./package.json', JSON.stringify(package, null, 2), () => {
+const key = process.argv[2]
+const obj = process.argv[3]
+pkg[key] = obj.includes('{') ? JSON.parse(obj) : obj
+fs.writeFile('./package.json', JSON.stringify(pkg, null, 2), () => {
   console.log('{}')
 })

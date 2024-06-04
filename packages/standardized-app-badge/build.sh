@@ -1,6 +1,14 @@
+#!/usr/bin/env bash
+
 RUNDIR=$(basename $(dirname $(dirname $PWD)))
-[[ $RUNDIR == "use-app-badge" ]] && ADDDIR="packages/use-app-badge" || ADDDIR=""
-cat > "$ADDDIR/lib/cjs/index.js" <<- "EOF"
+if [[ "$RUNDIR" == "use-app-badge" ]]; then
+  ADDDIR=""
+else
+  ADDDIR="packages/use-app-badge" 
+fi
+
+
+cat > "${ADDDIR}lib/cjs/index.js" <<- "EOF"
 if (process.env.NODE_ENV !== 'development') {
   module.exports = require('./index.production.js')
 } else {
@@ -8,7 +16,7 @@ if (process.env.NODE_ENV !== 'development') {
 }
 EOF
 
-cat > "$ADDDIR/lib/es/index.mjs" <<- "EOF"
+cat > "${ADDDIR}lib/es/index.mjs" <<- "EOF"
 import { 
   clearAppBadge as cab, 
   isAppBadgeAllowed as iaba, 
@@ -31,7 +39,6 @@ export const requestAppBadgePermission = process.env.NODE_ENV !== 'development' 
 export const setAppBadge = process.env.NODE_ENV !== 'development' ? sab : sabDev
 EOF
 
-
-pnpm pkg set 'main'='./lib/cjs/index.js' -ws 
-pnpm pkg set 'module'='./lib/es/index.mjs' -ws 
-bun replace-exports.js '{".":{"types":"./lib/index.d.ts","import":"./lib/es/index.mjs","default":"./lib/cjs/index.js"}}' 
+node replace-exports.js main './lib/cjs/index.js'
+node replace-exports.js module './lib/es/index.mjs'
+node replace-exports.js exports '{".":{"types":"./lib/index.d.ts","import":"./lib/es/index.mjs","default":"./lib/cjs/index.js"}}' 

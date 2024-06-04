@@ -3,14 +3,21 @@
   "version": "0.2.0",
   "description": "Navigator Badge API wrapper for React",
   "sideEffects": false,
-  "main": "./lib/cjs/index.js",
-  "module": "./lib/es/index.mjs",
+  "main": "./lib/cjs/index.production.js",
+  "module": "./lib/es/index.production.mjs",
   "types": "./lib/index.d.ts",
   "exports": {
     ".": {
-      "types": "./lib/index.d.ts",
-      "import": "./lib/es/index.mjs",
-      "default": "./lib/cjs/index.js"
+      "development": {
+        "types": "./lib/index.d.ts",
+        "import": "./lib/es/index.development.mjs",
+        "default": "./lib/cjs/index.development.js"
+      },
+      "production": {
+        "types": "./lib/index.d.ts",
+        "import": "./lib/es/index.production.mjs",
+        "default": "./lib/cjs/index.production.js"
+      }
     }
   },
   "files": [
@@ -40,7 +47,7 @@
   },
   "homepage": "https://jaxs.onl/use-app-badge/",
   "scripts": {
-    "build": "bunchee -m && ./build.sh && ./restore.sh",
+    "build": "./restore.sh && bunchee -m && ./build.sh",
     "build-ci": "bunchee -m && ./build.sh",
     "build-publish": "bunchee -m && ./build.sh && npm publish && ./restore.sh",
     "dev": "bunchee --watch -m",
@@ -53,13 +60,12 @@
     "react": ">=18"
   },
   "dependencies": {
-    "standardized-app-badge": "^0.2.0"
+    "standardized-app-badge": "workspace:*"
   },
   "devDependencies": {
     "@happy-dom/global-registrator": "^12.0.0",
     "@jest/globals": "^29.7.0",
     "@testing-library/react": "^14.0.0",
-    "@types/bun": "^1.0.12",
     "@types/react": "^18.2.21",
     "@types/react-dom": "^18.2.7",
     "@typescript-eslint/eslint-plugin": "^7.7.0",
@@ -73,8 +79,8 @@
     "happy-dom": "^12.1.6",
     "microbundle": "^0.15.1",
     "prettier": "^3.0.3",
-    "react": "19.0.0-rc-3f1436cca1-20240516",
-    "react-dom": "19.0.0-rc-3f1436cca1-20240516",
+    "react": "19.0.0-rc-9598c41a20-20240603",
+    "react-dom": "19.0.0-rc-9598c41a20-20240603",
     "rimraf": "^5.0.1",
     "typescript": "^5.2.2"
   },

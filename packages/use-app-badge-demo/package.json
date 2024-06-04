@@ -13,16 +13,16 @@
     "@contentlayer/core": "^0.3.4",
     "class-variance-authority": "^0.7.0",
     "contentlayer": "^0.3.4",
-    "next": "14.3.0-canary.70",
+    "next": "15.0.0-canary.9",
     "next-contentlayer": "^0.3.4",
-    "react": "19.0.0-rc-3f1436cca1-20240516",
-    "react-dom": "19.0.0-rc-3f1436cca1-20240516",
+    "react": "19.0.0-rc-9598c41a20-20240603",
+    "react-dom": "19.0.0-rc-9598c41a20-20240603",
     "rehype-autolink-headings": "^7.1.0",
     "rehype-pretty-code": "^0.13.1",
     "rehype-slug": "^6.0.0",
     "sharp": "^0.33.3",
-    "standardized-app-badge": "*",
-    "use-app-badge": "*"
+    "standardized-app-badge": "workspace:*",
+    "use-app-badge": "workspace:*"
   },
   "devDependencies": {
     "@tailwindcss/cli": "4.0.0-alpha.14",

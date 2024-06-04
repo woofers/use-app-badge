@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "turbo run dev",
     "build-site": "turbo run build-site",
-    "build": "turbo run build",
+    "build": "turbo run build --force",
     "lint": "turbo run lint",
     "test": "turbo run test",
     "typecheck": "turbo run typecheck",
@@ -15,7 +15,6 @@
   "keywords": [],
   "author": "",
   "license": "MIT",
-  "workspaces": ["packages/*"],
   "devDependencies": {
     "prettier": "^3.2.5",
     "turbo": "^1.13.2"
