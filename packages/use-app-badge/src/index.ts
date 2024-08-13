@@ -42,11 +42,15 @@ const snapshot = {
 
 const getServerSnapshot = () => serverSnapshot
 const getSnapshot = () => snapshot
-const emptySubscribe = () => () => {}
+const emptySubscribe = () => () => {
+  // pass
+}
 
 const defaultFavIcon = false as unknown as FavIcon
 
-const noop = () => {}
+const noop = () => {
+  // pass
+}
 const useAppBadge = (
   { favIcon }: { favIcon: FavIcon } = { favIcon: defaultFavIcon }
 ) => {
@@ -169,14 +173,14 @@ const useAppBadge = (
       setIcon(icon)
     }
     update().catch(noop)
-  }, [hasIcon, count, src, badgeColor, badgeSize, textColor, isAllowed])
+  }, [hasIcon, count, src, badgeColor, badgeSize, textColor])
 
   useEffect(() => {
     let ogMeta: string
     if (typeof window === 'undefined' || !hasIcon) {
       return
     }
-    /* prettier-ignore */
+    // biome-ignore format: Keeps selector formatted
     const getElement = () => (document.querySelector('link[rel="icon"]:not([media])') || {}) as { href: string }
     if (updateMeta && icon) {
       const meta = getElement()
@@ -211,6 +215,7 @@ const AppBadge: React.FC<{
     return false
   })()
   useEffect(() => {
+    const _ = allowed
     const isSet = typeof count === 'boolean'
     if (isSet || count > 0) {
       !isSet ? set(count) : set()

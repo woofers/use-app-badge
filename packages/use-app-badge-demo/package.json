@@ -1,28 +1,28 @@
 {
   "name": "use-app-badge-demo",
-  "version": "0.0.1",
+  "version": "0.3.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint",
-    "format": "prettier --write \"{tests,src}/**/*.{js,jsx,mjs,ts,tsx}\""
+    "build-site": "next build",
+    "start": "serve out",
+    "lint": "biome lint",
+    "format": "biome format --write"
   },
   "dependencies": {
     "@contentlayer/core": "^0.3.4",
     "class-variance-authority": "^0.7.0",
     "contentlayer": "^0.3.4",
-    "next": "14.3.0-canary.70",
+    "next": "15.0.0-canary.9",
     "next-contentlayer": "^0.3.4",
-    "react": "19.0.0-rc-3f1436cca1-20240516",
-    "react-dom": "19.0.0-rc-3f1436cca1-20240516",
+    "react": "19.0.0-rc-9598c41a20-20240603",
+    "react-dom": "19.0.0-rc-9598c41a20-20240603",
     "rehype-autolink-headings": "^7.1.0",
     "rehype-pretty-code": "^0.13.1",
     "rehype-slug": "^6.0.0",
     "sharp": "^0.33.3",
-    "standardized-app-badge": "*",
-    "use-app-badge": "*"
+    "standardized-app-badge": "workspace:*",
+    "use-app-badge": "workspace:*"
   },
   "devDependencies": {
     "@tailwindcss/cli": "4.0.0-alpha.14",
@@ -31,11 +31,9 @@
     "@types/react": "^18.2.78",
     "@types/react-dom": "^18.2.25",
     "babel-plugin-react-compiler": "^0.0.0-experimental-592953e-20240517",
-    "eslint": "^9.0.0",
-    "eslint-config-next": "14.2.1",
-    "eslint-plugin-react-compiler": "^0.0.0-experimental-c8b3f72-20240517",
     "postcss": "^8.4.38",
     "prettier": "^3.2.5",
+    "serve": "^14.2.3",
     "tailwindcss": "4.0.0-alpha.14",
     "typescript": "^5.4.5"
   }

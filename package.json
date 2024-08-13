@@ -1,23 +1,23 @@
 {
   "name": "use-app-badge",
   "private": false,
-  "version": "0.0.1",
+  "version": "0.3.0",
   "description": "",
   "scripts": {
     "dev": "turbo run dev",
     "build-site": "turbo run build-site",
-    "build": "turbo run build",
+    "build": "turbo run build --force",
     "lint": "turbo run lint",
     "test": "turbo run test",
     "typecheck": "turbo run typecheck",
-    "format": "prettier --write \"packages/**/{src,tests}/**/*.{jsx,js,tsx,ts}\""
+    "format": "biome format --write",
+    "clean": "turbo run clean"
   },
   "keywords": [],
   "author": "",
   "license": "MIT",
-  "workspaces": ["packages/*"],
   "devDependencies": {
-    "prettier": "^3.2.5",
+    "@biomejs/biome": "^1.8.3",
     "turbo": "^1.13.2"
   }
 }

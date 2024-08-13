@@ -89,7 +89,13 @@ const createComponents = (meta: Meta) => {
     Image,
     img: Img,
     ul: ({ className, ...rest }: React.HTMLProps<HTMLUListElement>) => (
-      <ul className={cx(className !== 'feature-list' && 'list-style-[circle] ps-8', className)} {...rest} />
+      <ul
+        className={cx(
+          className !== 'feature-list' && 'list-style-[circle] ps-8',
+          className
+        )}
+        {...rest}
+      />
     ),
     pre: (props: React.HTMLProps<HTMLPreElement>) => (
       <pre
