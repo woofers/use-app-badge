@@ -5,7 +5,7 @@
       "a11y": {
         "noAriaUnsupportedElements": "warn",
         "noBlankTarget": "off",
-        "useAltText": "warn",
+        "useAltText": "off",
         "useAriaPropsForRole": "warn",
         "useValidAriaProps": "warn",
         "useValidAriaValues": "warn"

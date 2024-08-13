@@ -25,6 +25,6 @@
     }
   },
   "files": {
-    "ignore": ["package.json", "pnpm-lock.yml"]
+    "ignore": ["package.json", "pnpm-lock.yml", "dist/*"]
   }
 }

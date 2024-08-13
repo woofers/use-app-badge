@@ -36,8 +36,8 @@ const createCanvas = () => {
 }
 
 const makePool = <T>(create: () => T) => {
-  let pool = [] as T[]
-  let available = [] as number[]
+  const pool = [] as T[]
+  const available = [] as number[]
   const get = () => {
     if (available.length > 0) {
       const lastAvailable = available.pop()
