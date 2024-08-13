@@ -3,6 +3,8 @@ name: useAppBadge
 on: [push]
 permissions:
   contents: write
+env:
+  NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
 jobs:
   build:
     name: Build
@@ -29,6 +31,12 @@ jobs:
         run: pnpm -C packages/use-app-badge build-ci
       - name: Build Demo
         run: pnpm -C packages/use-app-badge-demo build-site
+      - name: Publish standardized-app-badge
+        if: startsWith(github.ref, 'refs/tags/')
+        run: pnpm -C packages/standardized-app-badge package
+      - name: Publish use-app-badge
+        if: startsWith(github.ref, 'refs/tags/')
+        run: pnpm -C packages/use-app-badge package
       - name: Publish Demo
         uses: JamesIves/github-pages-deploy-action@v4.5.0
         with:
