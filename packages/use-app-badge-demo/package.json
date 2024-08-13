@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "serve out",
     "lint": "next lint",
     "format": "prettier --write \"{tests,src}/**/*.{js,jsx,mjs,ts,tsx}\""
   },
@@ -36,6 +36,7 @@
     "eslint-plugin-react-compiler": "^0.0.0-experimental-c8b3f72-20240517",
     "postcss": "^8.4.38",
     "prettier": "^3.2.5",
+    "serve": "^14.2.3",
     "tailwindcss": "4.0.0-alpha.14",
     "typescript": "^5.4.5"
   }
