@@ -1,6 +1,6 @@
 {
   "name": "use-app-badge",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Navigator Badge API wrapper for React",
   "sideEffects": false,
   "main": "./lib/cjs/index.production.js",

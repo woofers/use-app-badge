@@ -1,6 +1,6 @@
 {
   "name": "use-app-badge-demo",
-  "version": "0.0.1",
+  "version": "0.3.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -31,9 +31,6 @@
     "@types/react": "^18.2.78",
     "@types/react-dom": "^18.2.25",
     "babel-plugin-react-compiler": "^0.0.0-experimental-592953e-20240517",
-    "eslint": "^9.0.0",
-    "eslint-config-next": "14.2.1",
-    "eslint-plugin-react-compiler": "^0.0.0-experimental-c8b3f72-20240517",
     "postcss": "^8.4.38",
     "prettier": "^3.2.5",
     "serve": "^14.2.3",
