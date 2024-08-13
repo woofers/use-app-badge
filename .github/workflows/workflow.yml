@@ -26,7 +26,7 @@ jobs:
       - name: Build use-app-badge
         run: pnpm -C packages/use-app-badge build-ci
       - name: Build Demo
-        run: pnpm -C packages/use-app-badge-demo build
+        run: pnpm -C packages/use-app-badge-demo build-site
       - name: Publish Demo
         uses: JamesIves/github-pages-deploy-action@v4.5.0
         with:
