@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build-site": "next build",
     "start": "serve out",
     "lint": "next lint",
     "format": "prettier --write \"{tests,src}/**/*.{js,jsx,mjs,ts,tsx}\""

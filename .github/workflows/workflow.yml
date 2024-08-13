@@ -10,16 +10,23 @@ jobs:
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4
-      - name: Install Bun
-        uses: oven-sh/setup-bun@v1
+      - name: Use Node.js
+        uses: actions/setup-node@v4
         with:
-          bun-version: 1.1.7
+          node-version: '22'
+          registry-url: 'https://registry.npmjs.org'
+      - name: use pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.7.0
+      - name: Install
+        run: pnpm install
       - name: Build standardized-app-badge
-        run: bun install && bun run --cwd packages/standardized-app-badge build-ci
+        run: pnpm -C packages/standardized-app-badge build-ci
       - name: Build use-app-badge
-        run: bun install && bun run --cwd packages/use-app-badge build-ci
+        run: pnpm -C packages/use-app-badge build-ci
       - name: Build Demo
-        run: bun install --production && tree node_modules/use-app-badge/lib && bun run --cwd packages/use-app-badge-demo build  
+        run: pnpm -C packages/use-app-badge-demo build
       - name: Publish Demo
         uses: JamesIves/github-pages-deploy-action@v4.5.0
         with:

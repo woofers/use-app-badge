@@ -47,11 +47,12 @@
   },
   "homepage": "https://jaxs.onl/use-app-badge/",
   "scripts": {
+    "start": "serve out",
     "build": "./restore.sh && bunchee -m && ./build.sh",
     "build-ci": "bunchee -m && ./build.sh",
-    "build-publish": "bunchee -m && ./build.sh && npm publish && ./restore.sh",
+    "package": "pnpm publish --no-git-checks --access public",
     "dev": "bunchee --watch -m",
-    "test": "bun typecheck",
+    "test": "pnpm typecheck",
     "lint": "eslint \"src/**/*.{jsx,js,tsx,ts}\"",
     "typecheck": "tsc --p .",
     "clean": "rimraf lib"
