@@ -6,8 +6,8 @@
     "dev": "next dev",
     "build-site": "next build",
     "start": "serve out",
-    "lint": "next lint",
-    "format": "prettier --write \"{tests,src}/**/*.{js,jsx,mjs,ts,tsx}\""
+    "lint": "biome lint",
+    "format": "biome format --write"
   },
   "dependencies": {
     "@contentlayer/core": "^0.3.4",

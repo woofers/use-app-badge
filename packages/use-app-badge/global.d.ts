@@ -3,5 +3,5 @@ declare global {
     var process: { env: { NODE_ENV: string } }
   }
 }
-    
+
 export {}

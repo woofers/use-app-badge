@@ -1,12 +1,8 @@
 {
-    "extends": [
-        "//"
-    ],
-    "pipeline": {
-        "build": {
-            "dependsOn": [
-                "^build"
-            ]
-        }
+  "extends": ["//"],
+  "pipeline": {
+    "build": {
+      "dependsOn": ["^build"]
     }
+  }
 }

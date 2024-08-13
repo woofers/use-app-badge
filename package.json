@@ -10,13 +10,13 @@
     "lint": "turbo run lint",
     "test": "turbo run test",
     "typecheck": "turbo run typecheck",
-    "format": "prettier --write \"packages/**/{src,tests}/**/*.{jsx,js,tsx,ts}\""
+    "format": "biome format --write"
   },
   "keywords": [],
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "prettier": "^3.2.5",
+    "@biomejs/biome": "^1.8.3",
     "turbo": "^1.13.2"
   }
 }

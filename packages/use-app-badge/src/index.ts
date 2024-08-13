@@ -176,7 +176,7 @@ const useAppBadge = (
     if (typeof window === 'undefined' || !hasIcon) {
       return
     }
-    /* prettier-ignore */
+  // biome-ignore format: Keeps selector formatted
     const getElement = () => (document.querySelector('link[rel="icon"]:not([media])') || {}) as { href: string }
     if (updateMeta && icon) {
       const meta = getElement()

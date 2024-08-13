@@ -49,7 +49,8 @@
     "package": "pnpm publish --no-git-checks --access public",
     "dev": "bunchee --watch -m",
     "test": "pnpm typecheck",
-    "lint": "eslint \"src/**/*.{jsx,js,tsx,ts}\"",
+    "format": "biome format --write",
+    "lint": "biome lint",
     "typecheck": "tsc --p .",
     "clean": "rimraf lib"
   },
