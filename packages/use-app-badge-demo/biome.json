@@ -8,7 +8,8 @@
         "useAltText": "off",
         "useAriaPropsForRole": "warn",
         "useValidAriaProps": "warn",
-        "useValidAriaValues": "warn"
+        "useValidAriaValues": "warn",
+        "noSvgWithoutTitle": "off"
       },
       "correctness": {
         "noChildrenProp": "error",
