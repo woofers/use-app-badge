@@ -147,8 +147,6 @@ The current app badge indicator status
 - Set to `true` if set without a value
 - Otherwise set as the notification count as a number
 
-#
-
 ```tsx
 countAsNumber: number
 ```
@@ -157,8 +155,6 @@ The current app badge indicator status as a number
 - Set to `0` if unset
 - Set to `1` if set without a value or the count is `1`
 - Otherwise set as the notification count as a number
-
-#
 
 ```tsx
 icon: string
@@ -169,8 +165,6 @@ a Base64 data PNG string or URL path
 - Set to an empty string if `favIcon` prop not passed
 - Set to file src if badge is unset
 - Otherwise set as a Base64 generated data string with the badge status baked-in
-
-#
 
 ```tsx
 set(contents?: number) => Promise<void> // throws DOMException
@@ -193,8 +187,6 @@ This method will resolve if set successfully or throw an error if:
 - The browser does not support API.
 - Permission was not granted (Safari)
 
-#
-
 ```tsx
 clear() => Promise<void> // throws DOMException
 ```
@@ -214,8 +206,6 @@ This method will resolve if set successfully or throw an error if:
 - The browser does not support API.
 - Permission was not granted (Safari).
 
-#
-
 ```tsx
 isSupported() => boolean
 ```
@@ -230,8 +220,6 @@ However this method does not check if the permission
 to display the badge was granted (Safari only).
 In-order to do this call `isAllowed()`.
 
-#
-
 ```tsx
 isAllowed() => boolean // throws Error
 ```
@@ -244,8 +232,6 @@ Queries if the app badge has been granted permission.
   Alternatively `navigator.permissions.query({ name: 'notifications' })` can be called
   if you only want to query the status without prompting but `requestPermission()` does
   this prior to prompting.
-
-#
 
 ```tsx
 requestPermission() => Promise<boolean>
@@ -288,13 +274,9 @@ count: number
 
 The value that the app badge should be set to.
 
-#
-
 ```tsx
 favIcon?: FavIcon
 ```
 
 Options for the favicon generation if the Badge API is unavailable.
 See the above options.
-
-#
